@@ -1,6 +1,7 @@
 
 .register-container {
     display: flex;
+    height: calc(100vh - 3.5rem);
 }
   
 .form-section {
@@ -13,7 +14,7 @@
 
 .map-section {
     flex: 1;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
 }
 
@@ -44,7 +45,13 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 0.5rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+.register-button:hover {
+    background-color: #009b43;
+    transform: scale(1.05); 
+  }
 
 .register-title {
     font-size: 2rem;
@@ -58,6 +65,12 @@ p {
     margin-top: 0;
     text-align: center;
   }
+
+.forgot-psd {
+    font-size: 0.8rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
 
 .register-link {
     color: #1a73e8;

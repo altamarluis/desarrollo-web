@@ -1,7 +1,7 @@
 import React from 'react'
 import '../styles/FormField.css'
 
-const FormField = ({name, label, type, value, placeholder, onChange, error, icon: IconComponent, }) => {
+const FormField = ({name, label, type, value, placeholder, onChange, error, icon: IconComponent}) => {
     return(
         <div className="form-group">
             <label htmlFor={name}>{label}</label>

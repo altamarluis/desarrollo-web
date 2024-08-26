@@ -50,12 +50,12 @@ function LoginView() {
       };
 
     return (
-      <div>
+      <div className='text-xl'>
         <div className="register-container">
           <div className="form-section">
             <form className="register-form" onSubmit={handleSubmit}>
               <h2 className="register-title">Inicar Sesión</h2>
-              <p>¿No tienes una cuenta aún? <a href="#" className="register-link">Crea una</a></p>
+              <p>¿No tienes una cuenta aún?, <a href="#" className="register-link">Crea una</a></p>
               
               <FormField
                 name="username"

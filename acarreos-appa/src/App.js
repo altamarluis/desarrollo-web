@@ -5,6 +5,7 @@ import MainView from './Views/MainView.js';
 import RegisterView from './Views/RegisterView.js';
 import LoginView from './Views/LoginView.js';
 import OrderView from './Views/OrderView.js'
+import OrderesTable from './components/OrderTable.js'
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/register" element={<RegisterView />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/order" element={<OrderView />} />
+          <Route path="/myorders" element={<OrderesTable />} />
         </Routes>
       </Router>
     </div>

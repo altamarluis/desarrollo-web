@@ -1,16 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import wp from '../assets/wallpaper.jpg';
 import '../styles/MainView.css';
 
 function MainView() {
+  const navigate = useNavigate();
+
+  
   return (
-    <main>
+    <main style={{backgroundImage: `url(${wp})`}}>
       <div className="upper-content">
         <h1>Acarreos Appa</h1>
         <p>Conectando todas las naciones</p>
-        <div className="service-buttons">
+        {/* <div className="service-buttons">
           <button>Cotiza un servico</button>
           <button>Solicita un servicio</button>
-        </div>
+        </div> */}
       </div>
       <div className="search-section">
         <div className="search-container">

@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import mapImage from '../assets/map-image.jpg';
+import React, { useState, useContext } from 'react';
 import mapImage2 from '../assets/map-image2.jpg';
+import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterView.css'
 import { FaLock, FaMapMarkerAlt, FaEnvelope, FaUser } from 'react-icons/fa';
 import FormField from '../components/FormField';
+import { UserContext } from '../services/userContext';
 
 
 function LoginView() {
+  const navigate = useNavigate();
+  const { login } = useContext(UserContext);
+
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -35,9 +39,13 @@ function LoginView() {
         if (Object.keys(formErrors).length > 0) {
           setErrors(formErrors);
         } else {
-          setErrors({});
-          console.log("Formulario enviado:", formData);
-          // Aquí iría la lógica para enviar los datos al servidor
+          const isAuthenticated = formData.username === 'aang' && formData.password === '1234';
+          if (isAuthenticated) {
+            login(formData.username)
+            navigate('/');
+          } else {
+            alert('Credenciales incorrectas');
+          }
         }
       };
 

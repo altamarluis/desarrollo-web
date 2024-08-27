@@ -10,8 +10,8 @@ function MainView() {
   return (
     <main style={{backgroundImage: `url(${wp})`}}>
       <div className="upper-content">
-        <h1>Acarreos Appa</h1>
-        <p>Conectando todas las naciones</p>
+        <h1 className='font-semibold'>Acarreos Appa</h1>
+        <p className='text-xl font-medium'>Conectando todas las naciones</p>
         {/* <div className="service-buttons">
           <button>Cotiza un servico</button>
           <button>Solicita un servicio</button>
@@ -19,7 +19,7 @@ function MainView() {
       </div>
       <div className="search-section">
         <div className="search-container">
-          <h2>Localiza tu envío</h2>
+          <h2 className='text-2xl font-medium'>Localiza tu envío</h2>
           <div className="search-bar">
             <input type="text" placeholder="Número de guía" />
             <button>

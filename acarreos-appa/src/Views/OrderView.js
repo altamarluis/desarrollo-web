@@ -86,32 +86,32 @@ const SolicitarServicio = () => {
 
   return (
     <div className="solicitar-servicio">
-      <button className="back-button"><FaArrowLeft/> Regresar</button>
-      <h2>Cotizar servicio</h2>
+      <button className="back-button flex"><FaArrowLeft className='pr-1 m-1'/><p className='text-base'>Regresar</p></button>
+      <h2 className='font-bold'>Cotizar servicio</h2>
       <form onSubmit={handleSubmit}>
         <div className="service-type">
-          <h4>Selecciona el tipo de servicio</h4>
+          <h4 className='font-bold '>Selecciona el tipo de servicio</h4>
           <div className="service-buttons">
             <button
               type="button"
-              className={serviceType === 'documento' ? 'active' : ''}
+              className={serviceType === 'documento' ? 'active' : 'text-xs'}
               onClick={() => setServiceType('documento')}
             >
-              Documento
+              <p className='text-sm'>Documento</p>
             </button>
             <button
               type="button"
               className={serviceType === 'objeto' ? 'active' : ''}
               onClick={() => setServiceType('objeto')}
             >
-              Objeto
+              <p className='text-sm'>Objeto</p>
             </button>
             <button
               type="button"
               className={serviceType === 'mudanza' ? 'active' : ''}
               onClick={() => setServiceType('mudanza')}
             >
-              Mudanza
+              <p className='text-sm'>Mudanza</p>
             </button>
           </div>
         </div>

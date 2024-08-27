@@ -2,7 +2,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
   }
   
   .user-profile {
@@ -61,6 +61,7 @@
   }
   
   .service-form {
+    font-size: 0.95rem; /* 14px */
     margin-bottom: 20px;
   }
   

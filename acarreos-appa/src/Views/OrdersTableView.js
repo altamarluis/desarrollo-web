@@ -1,9 +1,7 @@
 import { useState } from "react"
-import HeaderList from "../components/common/HeaderList"
-import FilterList from "../components/common/FilterList"
-import OrderTable from "../components/OrderTable"
+import OrderTable from "../components/Table"
 
-const OrdersListComponent = () => {
+const OrdersList = () => {
 
   const dataTotal = [
     {
@@ -41,16 +39,13 @@ const OrdersListComponent = () => {
   const [data, setData] = useState(dataTotal)
 
     return (
-        <div className="w-1/2">
-          <div className="flex justify-center py-4 text-3xl font-bold">
-            <h1>Mis pedidos</h1>
+        <div className="justify-center py-4 text-3xl font-bold">
+          <div className="p-10 pb-10 font-bold">
+            <h2>Mis pedidos</h2>
           </div>
             
-            <div className="w-1/2 justify-items-center">
-                <div className="grid z-50 gap-4 place-items-center w-full mb-3 mt-5">
-                <FilterList setData={setData} dataTotal={dataTotal} />
-                </div>
-                <div className="w-1/2 pr-20 pl-20 justify-center">
+            <div className="grid justify-items-center">
+                <div className="w-full pr-20 pl-20 justify-center">
                 <OrderTable data={data} />
                 </div>
             </div>
@@ -59,4 +54,4 @@ const OrdersListComponent = () => {
     )
 }
 
-export default OrdersListComponent;
+export default OrdersList;

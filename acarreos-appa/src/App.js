@@ -5,12 +5,12 @@ import MainView from './Views/MainView.js';
 import RegisterView from './Views/RegisterView.js';
 import LoginView from './Views/LoginView.js';
 import OrderView from './Views/OrderView.js'
-import OrderesTable from './components/OrderTable.js'
+import OrdersList from './Views/OrdersTableView.js'
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App content-center">
       <Router>
         <Header />
         <Routes>
@@ -18,7 +18,7 @@ function App() {
           <Route path="/register" element={<RegisterView />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/order" element={<OrderView />} />
-          <Route path="/myorders" element={<OrderesTable />} />
+          <Route path="/myorders" element={<OrdersList />} />
         </Routes>
       </Router>
     </div>

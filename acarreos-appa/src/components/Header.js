@@ -84,11 +84,11 @@ function Header() {
   };
 
   return (
-    <header>
+    <header className='bg-[D9D9D9] h-[55px]'>
       <div className="logo">Appa</div>
-      <nav>
-        <button onClick={handleClickOrder}>Cotizar</button>
-        <button onClick={handleClickFind}>Localizar</button>
+      <nav className='font-regular '>
+        <button onClick={handleClickOrder} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Cotizar</button>
+        <button onClick={handleClickFind} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Localizar</button>
         {user && (
           <button>Historial</button>
         )}
@@ -107,8 +107,8 @@ function Header() {
           </div>
         ) : (
           <>
-            <button onClick={handleClickLogin}>Iniciar sesión</button>
-            <button onClick={handleClickRegister}>Registrarse</button>
+            <button onClick={handleClickLogin} className='hover:bg-white w-[120px] h-[30px] font-medium rounded-full'>Iniciar sesión</button>
+            <button onClick={handleClickRegister} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Registrarse</button>
           </>
         )}
       </nav>

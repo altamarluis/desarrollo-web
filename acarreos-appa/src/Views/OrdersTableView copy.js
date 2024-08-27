@@ -39,8 +39,8 @@ const OrdersList = () => {
   const [data, setData] = useState(dataTotal)
 
     return (
-        <div className="py-4 text-3xl font-bold">
-          <div className="justify-items-start p-10 pb-10 font-bold">
+        <div className="justify-center py-4 text-3xl font-bold">
+          <div className="p-10 pb-10 font-bold">
             <h2>Tus pedidos</h2>
           </div>
             

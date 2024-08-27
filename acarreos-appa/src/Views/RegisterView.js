@@ -74,12 +74,13 @@ function RegisterView() {
     return (
       <div>
         <div className="register-container">
-          <div className="form-section">
+          <div className="form-section text-sm">
             <form className="register-form" onSubmit={handleSubmit}>
-              <h2 className="register-title">Crear una cuenta</h2>
-              <p>¿Ya tienes una cuenta? <a href="#" className="register-link">Inicia Sesión</a></p>
+              <h2 className="register-title font-bold pb-2 text-3xl">Crear una cuenta</h2>
+              <p className='font-medium text-xs pb-4'>¿Ya tienes una cuenta? <a href="#" className="register-link">Inicia Sesión</a></p>
               
               <FormField
+                className='text-xs'
                 name="username"
                 label="Nombre de usuario*"
                 type="text"
@@ -91,6 +92,7 @@ function RegisterView() {
               />
 
               <FormField
+                className='text-xs'
                 name="id"
                 label="Número de Indentidad*"
                 type="text"

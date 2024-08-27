@@ -87,8 +87,8 @@ function Header() {
     <header className='bg-[D9D9D9] h-[55px]'>
       <div className="logo">Appa</div>
       <nav className='font-regular '>
-        <button onClick={handleClickOrder} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Cotizar</button>
-        <button onClick={handleClickFind} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Localizar</button>
+        <button onClick={handleClickOrder} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
+        <button onClick={handleClickFind} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
         {user && (
           <button>Historial</button>
         )}
@@ -107,8 +107,8 @@ function Header() {
           </div>
         ) : (
           <>
-            <button onClick={handleClickLogin} className='hover:bg-white w-[130px] h-[30px] font-medium rounded-full'>Iniciar sesión</button>
-            <button onClick={handleClickRegister} className='hover:bg-white w-[130px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Registrarse</button>
+            <button onClick={handleClickLogin} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Iniciar sesión</button>
+            <button onClick={handleClickRegister} className='hover:bg-white w-[130px] h-[35px] pr-2 pl-2 font-medium rounded'>Registrarse</button>
           </>
         )}
       </nav>

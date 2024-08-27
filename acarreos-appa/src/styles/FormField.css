@@ -4,6 +4,8 @@
 
 .input-group {
     position: relative;
+    
+    
 }
 
 .input-icon {
@@ -19,6 +21,7 @@
     margin-top: 0.1rem;
     border-radius: 5px;
     border: 1px solid #ccc;
+    font-size: 0.70rem; /* 14px */
 }
 
 .input-error {

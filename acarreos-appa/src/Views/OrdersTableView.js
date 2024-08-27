@@ -15,13 +15,13 @@ const columns = [
         minWidth: '200px',
         hide: 'md',
     },
-    
+
     {
         name: 'ESTADO',
         selector: row => {
             const stateStyles = {
                 delivered: "bg-[#E1FCEF] text-[#14804A]", 
-                delayed: "bg-[#FFF500] text-[#5C3131]", 
+                delayed: "bg-[#FFFBA7] text-[#FF4040]", 
                 transit: "bg-[#F0F1FA] text-[#4F5AED]", 
                 lost: "bg-[#FAF0F3] text-[#D12953]", 
                 inactive: "bg-[#E9EDF5] text-[#5A6376]" 
@@ -31,7 +31,7 @@ const columns = [
                 delivered: "Entregado",
                 delayed: "Retrasado",
                 transit: "En tránsito",
-                lost: "Perdido",
+                lost: "Extraviado",
                 inactive: "Inactivo"
             };
 

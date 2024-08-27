@@ -3,14 +3,17 @@ import Table from '../components/Table';
 
 const columns = [
     {
-        name: 'GUÍA PEDIDO',
+        name: 'PEDIDO',
         cell: row => (
-            <div className='font-semibold pl-3'> {row.orderId} </div>
+            <div className="flex pl-3 flex-col">
+				<div className='font-semibold'>{row.username}</div>
+				<div className="text-gray-500">{row.orderId}</div>
+			</div>
         ),
         style: {
             minWidth: '150px',
             justifyContent: 'start',
-        },
+        }
         
     },
     {
@@ -70,7 +73,8 @@ const columns = [
 ];
 
 const data = [
-    {
+    {   
+        username: 'Aang',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'inactive',
@@ -78,6 +82,7 @@ const data = [
         price: 100.00
     },
     {
+        username: 'Soka',
         orderId: 102342343,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'transit',
@@ -85,6 +90,7 @@ const data = [
         price: 100.00
     },
     {
+        username: 'Tio Iroh',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'delivered',
@@ -92,6 +98,7 @@ const data = [
         price: 200.00
     },
     {
+        username: 'Katara',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'delayed',
@@ -99,6 +106,7 @@ const data = [
         price: 300.00
     },
     {
+        username: 'Principe Zuko',
         orderId: 103230934,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'lost',
@@ -148,11 +156,11 @@ const customStyles = {
     },
 };
 
-const OrdersTable = () => {
+const CarrierTable = () => {
     return (
       <div className="font-bold">
           <div className="justify-items-start p-3 font-bold">
-            <h2>Tus pedidos</h2>
+            <h2>Pedidos transportados por Carrier</h2>
           </div>
           <div className="justify-items-center pr-20 pl-20 justify-center">
             <Table 
@@ -167,4 +175,4 @@ const OrdersTable = () => {
     );
 };
 
-export default OrdersTable;
+export default CarrierTable;

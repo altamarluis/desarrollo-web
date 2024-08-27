@@ -107,8 +107,8 @@ function Header() {
           </div>
         ) : (
           <>
-            <button onClick={handleClickLogin} className='hover:bg-white w-[120px] h-[30px] font-medium rounded-full'>Iniciar sesión</button>
-            <button onClick={handleClickRegister} className='hover:bg-white w-[100px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Registrarse</button>
+            <button onClick={handleClickLogin} className='hover:bg-white w-[130px] h-[30px] font-medium rounded-full'>Iniciar sesión</button>
+            <button onClick={handleClickRegister} className='hover:bg-white w-[130px] h-[30px] pr-2 pl-2 font-medium rounded-full'>Registrarse</button>
           </>
         )}
       </nav>

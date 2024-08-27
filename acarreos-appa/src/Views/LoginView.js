@@ -5,6 +5,7 @@ import '../styles/RegisterView.css'
 import { FaLock, FaMapMarkerAlt, FaEnvelope, FaUser } from 'react-icons/fa';
 import FormField from '../components/FormField';
 import { UserContext } from '../services/userContext';
+import Database from '../database/Database';
 
 
 function LoginView() {
@@ -39,9 +40,9 @@ function LoginView() {
         if (Object.keys(formErrors).length > 0) {
           setErrors(formErrors);
         } else {
-          const isAuthenticated = formData.username === 'aang' && formData.password === '1234';
-          if (isAuthenticated) {
-            login(formData.username)
+          const user = Database.find(u => u.username.toLowerCase() === formData.username.toLowerCase() && u.password === formData.password);
+          if (user) {
+            login(user);
             navigate('/');
           } else {
             alert('Credenciales incorrectas');

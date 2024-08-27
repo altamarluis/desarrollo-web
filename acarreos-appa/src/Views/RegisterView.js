@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import mapImage from '../assets/map-image.jpg';
 import mapImage2 from '../assets/map-image2.jpg';
 import '../styles/RegisterView.css'
 import { FaLock, FaMapMarkerAlt, FaEnvelope, FaUser, FaIdCard, FaGlobe } from 'react-icons/fa';
 import FormField from '../components/FormField';
-
+import Database from '../database/Database';
+import { UserContext } from '../services/userContext';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterView() {
+  const navigate = useNavigate();
+  const { login } = useContext(UserContext);
     const [formData, setFormData] = useState({
         username: '',
         id: '',
@@ -49,9 +53,22 @@ function RegisterView() {
           setErrors(formErrors);
         } else {
           setErrors({});
-          console.log("Formulario enviado:", formData);
-          // Aquí iría la lógica para enviar los datos al servidor
-        }
+          const newUser = {
+            role: 'client',  // Rol por defecto
+            id: parseInt(formData.id),
+            username: formData.username,
+            email: formData.email,
+            nationality: formData.nationality,
+            password: formData.password,
+            location: formData.location || 'No especificada'
+        };
+
+        Database.push(newUser);
+        alert('Usuario registrado con éxito');
+        login(newUser);
+        navigate('/');
+        
+      }
       };
 
     return (

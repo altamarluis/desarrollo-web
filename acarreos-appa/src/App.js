@@ -7,6 +7,7 @@ import LoginView from './Views/LoginView.js';
 import OrderView from './Views/OrderView.js'
 import OrdersTable from './Views/OrdersTableView.js'
 import CarrierTable from './Views/CarrierTableView.js'
+import CarriersInventoryTable from './Views/AdminCarriersTableView.js'
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/order" element={<OrderView />} />
           <Route path="/myorders" element={<OrdersTable />} />
           <Route path="/carrierorders" element={<CarrierTable />} />
+          <Route path="/carriers" element={<CarriersInventoryTable />} />
         </Routes>
       </Router>
     </div>

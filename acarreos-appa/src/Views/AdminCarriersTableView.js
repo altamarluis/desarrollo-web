@@ -3,11 +3,11 @@ import Table from '../components/Table';
 
 const columns = [
     {
-        name: 'PEDIDO',
+        name: 'NOMBRE',
         cell: row => (
             <div className="flex pl-3 flex-col">
-				<div className='font-semibold'>{row.clientName}</div>
-				<div className="text-gray-500">{row.orderId}</div>
+				<div className='font-semibold'>{row.carrierName}</div>
+				<div className="text-gray-500">{row.carrierId}</div>
 			</div>
         ),
         style: {
@@ -27,19 +27,15 @@ const columns = [
         name: 'ESTADO',
         selector: row => {
             const stateStyles = {
-                delivered: "bg-[#E1FCEF] text-[#14804A]", 
-                delayed: "bg-[#FFFBA7] text-[#FF4040]", 
+                available: "bg-[#E1FCEF] text-[#14804A]",
                 transit: "bg-[#F0F1FA] text-[#4F5AED]", 
-                lost: "bg-[#FAF0F3] text-[#D12953]", 
-                inactive: "bg-[#E9EDF5] text-[#5A6376]" 
+                rest: "bg-[#E9EDF5] text-[#5A6376]" 
             };
 
             const stateLabels = {
-                delivered: "Entregado",
-                delayed: "Retrasado",
                 transit: "En tránsito",
-                lost: "Extraviado",
-                inactive: "Inactivo"
+                rest: "Descanso",
+                available: "Disponible"
             };
 
             return (
@@ -51,7 +47,7 @@ const columns = [
         minWidth: '150px',
     },
     {
-        name: 'ÚLTIMA ACTUALIZACIÓN',
+        name: 'FINALIZACIÓN DESCANSO',
         cell: row => new Date(row.updateAt).toLocaleString('es-ES', {
             year: 'numeric',
             month: '2-digit',
@@ -64,9 +60,9 @@ const columns = [
         minWidth: '200px',  // Aumenta el ancho mínimo si es necesario
     },
     {
-        name: 'COSTO',
+        name: 'KMs RECORRIDOS',
         cell: row => (
-            <div className='font-semibold'> ${row.price.toFixed(2)} </div>
+            <div className='font-semibold'> {row.price.toFixed(2)} KMs</div>
         ),
         minWidth: '100px', 
     }
@@ -74,42 +70,42 @@ const columns = [
 
 const data = [
     {   
-        clientName: 'Aang',
-        orderId: 102932138,
+        carrierName: 'Appa',
+        carrierId: 1001,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'inactive',
+        state: 'available',
         updateAt: new Date('2024-08-26T10:35:24'),
         price: 100.00
     },
     {
-        clientName: 'Soka',
-        orderId: 102342343,
+        carrierName: 'Bisontuku',
+        carrierId: 1002,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
         state: 'transit',
         updateAt: new Date('2024-08-22T14:45:12'),
         price: 100.00
     },
     {
-        clientName: 'Tio Iroh',
-        orderId: 102932138,
+        carrierName: 'Bisontoque',
+        carrierId: 1003,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'delivered',
+        state: 'available',
         updateAt: new Date('2024-08-21T09:07:34'),
         price: 200.00
     },
     {
-        clientName: 'Katara',
-        orderId: 102932138,
+        carrierName: 'Guaco',
+        carrierId: 1004,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'delayed',
+        state: 'rest',
         updateAt: new Date('2024-08-26T16:15:27'),
         price: 300.00
     },
     {
-        clientName: 'Principe Zuko',
-        orderId: 103230934,
+        carrierName: 'Bisontico',
+        carrierId: 1005,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'lost',
+        state: 'rest',
         updateAt: new Date('2024-08-27T11:19:45'),
         price: 300.00
     },
@@ -156,11 +152,11 @@ const customStyles = {
     },
 };
 
-const CarrierTable = () => {
+const CarriersInventoryTable = () => {
     return (
       <div className="font-bold">
           <div className="justify-items-start p-3 font-bold">
-            <h2>Pedidos transportados por Carrier</h2>
+            <h2>Inventario de bisontes</h2>
           </div>
           <div className="justify-items-center pr-20 pl-20 justify-center">
             <Table 
@@ -175,4 +171,4 @@ const CarrierTable = () => {
     );
 };
 
-export default CarrierTable;
+export default CarriersInventoryTable;

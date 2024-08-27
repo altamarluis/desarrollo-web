@@ -1,12 +1,82 @@
-import React, { useState } from 'react';
-import FormField from '../components/FormField.js'
+import React, { useState, useEffect } from 'react';
 import { DocumentForm, ObjectForm, MovingForm } from '../components/OrderTypes.js'
 import '../styles/OrderView.css';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const SolicitarServicio = () => {
   const [serviceType, setServiceType] = useState('documento');
-  const [cost, setCost] = useState(1000.0);
+  const [cost, setCost] = useState(0.0);
+  const [documentData, setDocumentData] = useState({
+    value: 0,
+    weight: 0,
+    date: '',
+    cityOfOrigin: '',
+    cityOfDestiny:'',
+    addressOfOrigin: '',
+    addressOfDestiny: ''
+  });
+  const [objectData, setObjectData] = useState({
+    value: 0,
+    weight: 0,
+    date: '',
+    width: 0,
+    height:0,
+    length:0,
+    cityOfOrigin: '',
+    cityOfDestiny:'',
+    addressOfOrigin: '',
+    addressOfDestiny: ''
+  });
+  const [movingData, setMovingData] = useState({
+    value: 0,
+    size: '',
+    date: '',
+    cityOfOrigin: '',
+    cityOfDestiny:'',
+    addressOfOrigin: '',
+    addressOfDestiny: '',
+  });
+
+  const handleDocumentInputChange = (e) => {
+    const { name, value } = e.target;
+    setDocumentData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleObjectInputChange = (e) => {
+    const { name, value } = e.target;
+    setObjectData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleMovingInputChange = (e) => {
+    const { name, value } = e.target;
+    setMovingData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const calculateCost = () => {
+    let calculatedCost = 0;
+    let distance =  2;
+    switch (serviceType) {
+      case 'documento':
+        calculatedCost = (distance * 2) + (documentData.value * 0.3) + (documentData.weight * 0.05);
+        break;
+      case 'objeto':
+        calculatedCost = (distance * 2) + (objectData.value * 0.2) + (objectData.weight * 0.1) + (objectData.width * objectData.height * objectData.length * 0.01);
+        break;
+      case 'mudanza':
+        if (movingData.size.value === 'small') calculatedCost = (distance * 2) + movingData.value * 0.3 + 20;
+        else if (movingData.size.value === 'medium') calculatedCost = (distance * 2) + movingData.value * 0.3 + 35;
+        else if (movingData.size.value === 'large') calculatedCost = (distance * 2) + movingData.value * 0.3 + 50;
+        else calculatedCost = (distance * 2) + movingData.value * 0.3;
+        break;
+      default:
+        calculatedCost = 0;
+    }
+    setCost(calculatedCost);
+  };
+
+  useEffect(() => {
+    calculateCost();
+  }, [serviceType, documentData, objectData, movingData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,9 +116,9 @@ const SolicitarServicio = () => {
           </div>
         </div>
         
-        {serviceType === 'documento' && <DocumentForm />}
-        {serviceType === 'objeto' && <ObjectForm />}
-        {serviceType === 'mudanza' && <MovingForm />}
+        {serviceType === 'documento' && <DocumentForm onChange={handleDocumentInputChange}/>}
+        {serviceType === 'objeto' && <ObjectForm onChange={handleObjectInputChange}/>}
+        {serviceType === 'mudanza' && <MovingForm onChange={handleMovingInputChange} movingData={movingData.size} setMovingData={setMovingData}/>}
 
         <div className="final-row">
             <div className="form-group">

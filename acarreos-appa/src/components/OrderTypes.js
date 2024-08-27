@@ -5,16 +5,16 @@ import '../styles/OrderView.css';
 import '../styles/FormField.css'
 import { FaMoneyBillWave, FaWeight, FaCalendarAlt, FaCity, FaMapMarkerAlt, FaRulerHorizontal, FaRulerVertical, FaRuler} from 'react-icons/fa';
 
-export const DocumentForm = () => (
+export const DocumentForm = ({ onChange }) => (
   <div className="service-form">
     <div className="form-row">
       <FormField
-        name="declared value"
+        name="value"
         label="Valor declarado"
         type="text"
         value={null}
-        placeholder="En monedas de oro"
-        onChange={null}
+        placeholder="En piezas de oro"
+        onChange={onChange}
         error={null}
         icon={FaMoneyBillWave}
 
@@ -25,7 +25,7 @@ export const DocumentForm = () => (
         type="text"
         value={null}
         placeholder="Máximo 2kg"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaWeight}
       />
@@ -36,7 +36,7 @@ export const DocumentForm = () => (
         type="date"
         value={null}
         placeholder=""
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaCalendarAlt}
       />
@@ -49,7 +49,7 @@ export const DocumentForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de origen"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaCity}
       />
@@ -60,7 +60,7 @@ export const DocumentForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de destino"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaCity}
       />
@@ -72,7 +72,7 @@ export const DocumentForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaMapMarkerAlt}
       />
@@ -83,7 +83,7 @@ export const DocumentForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaMapMarkerAlt}
       />
@@ -91,16 +91,16 @@ export const DocumentForm = () => (
   </div>
 );
 
-export const ObjectForm = () => (
+export const ObjectForm = ({ onChange }) => (
   <div className="service-form">
     <div className="form-row">
       <FormField
-        name="declared value"
+        name="value"
         label="Valor declarado"
         type="text"
         value={null}
-        placeholder="En monedas de oro"
-        onChange={null}
+        placeholder="En piezas de oro"
+        onChange={ onChange }
         error={null}
         icon={FaMoneyBillWave}
 
@@ -111,7 +111,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Máximo 2kg"
-        onChange={null}
+        onChange={ onChange }
         error={null}
         icon={FaWeight}
       />
@@ -122,7 +122,7 @@ export const ObjectForm = () => (
         type="date"
         value={null}
         placeholder=""
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCalendarAlt}
       />
@@ -137,7 +137,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Máximo 500cm"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaRulerHorizontal}
 
@@ -148,7 +148,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Máximo 500cm"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaRulerVertical}
       />
@@ -159,7 +159,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Máximo 500cm"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaRuler}
       />
@@ -173,7 +173,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de origen"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCity}
       />
@@ -184,7 +184,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de destino"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCity}
       />
@@ -196,7 +196,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaMapMarkerAlt}
       />
@@ -207,7 +207,7 @@ export const ObjectForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaMapMarkerAlt}
       />
@@ -215,16 +215,16 @@ export const ObjectForm = () => (
   </div>
 );
 
-export const MovingForm = () => (
+export const MovingForm = ({ onChange, movingData, setMovingData }) => (
   <div className="service-form">
     <div className="form-row">
       <FormField
-        name="declared value"
+        name="value"
         label="Valor declarado"
         type="text"
         value={null}
-        placeholder="En monedas de oro"
-        onChange={null}
+        placeholder="En piezas de oro"
+        onChange={onChange}
         error={null}
         icon={FaMoneyBillWave}
 
@@ -235,13 +235,14 @@ export const MovingForm = () => (
       <div className="input-group">
       <Select
         id="select"
+        name="size"
         options={[
           { value: 'small', label: 'Pequeño' },
           { value: 'medium', label: 'Mediano' },
-          { value: 'big', label: 'Grande' },
+          { value: 'large', label: 'Grande' },
         ]}
-        value={null}
-        onChange={null}
+        value={movingData}
+        onChange={(selectedOption) => setMovingData(prev => ({ ...prev, size: selectedOption }))}
         placeholder="selecciona"
       />
       </div>
@@ -253,7 +254,7 @@ export const MovingForm = () => (
         type="date"
         value={null}
         placeholder=""
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCalendarAlt}
       />
@@ -266,7 +267,7 @@ export const MovingForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de origen"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCity}
       />
@@ -277,7 +278,7 @@ export const MovingForm = () => (
         type="text"
         value={null}
         placeholder="Ingresa la ciudad de destino"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaCity}
       />
@@ -289,7 +290,7 @@ export const MovingForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaMapMarkerAlt}
       />
@@ -300,7 +301,7 @@ export const MovingForm = () => (
         type="text"
         value={null}
         placeholder="En coordenadas"
-        onChange={null}
+        onChange={onChange}
         error={null}
         icon={FaMapMarkerAlt}
       />

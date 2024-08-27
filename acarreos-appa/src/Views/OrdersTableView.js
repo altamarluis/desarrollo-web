@@ -15,6 +15,7 @@ const columns = [
         minWidth: '200px',
         hide: 'md',
     },
+    
     {
         name: 'ESTADO',
         selector: row => {

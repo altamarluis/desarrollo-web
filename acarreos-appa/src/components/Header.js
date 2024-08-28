@@ -1,16 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaTimes, FaLock } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import '../styles/Header.css';
 import { UserContext } from '../services/userContext';
-import FormField from './FormField';
-import Modal from './Modal'
+import Modal from './Modal';
 import EditUserForm from '../forms/EditUserForm';
 import ChangePasswordForm from '../forms/ChangePasswordForm';
 
 function Header() {
   const navigate = useNavigate();
-  const { user, logout} = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -21,12 +20,8 @@ function Header() {
     confirmNewPassword: ''
   });
 
-
   const handleClickRegister = () => navigate('/register');
   const handleClickLogin = () => navigate('/login');
-  const handleClickOrder = () => navigate('/order');
-  const handleClickFind = () => navigate('/');
-
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -34,7 +29,7 @@ function Header() {
 
   const handleEditUser = () => {
     setShowEditModal(!showEditModal);
-    setShowDropdown(false)
+    setShowDropdown(false);
   };
 
   const handleChangePassword = () => {
@@ -55,7 +50,6 @@ function Header() {
     setPasswordData(prev => ({ ...prev, [name]: value }));
   };
 
-
   const validatePasswordForm = () => {
     let tempErrors = {};
     if (!passwordData.currentPassword) tempErrors.currentPassword = "La contraseña actual es obligatoria";
@@ -69,14 +63,12 @@ function Header() {
     return tempErrors;
   };
 
-
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     const formErrors = validatePasswordForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
-      // Aquí iría la lógica para cambiar la contraseña
       console.log("Cambio de contraseña:", passwordData);
       setShowPasswordModal(false);
       setErrors({});
@@ -86,41 +78,69 @@ function Header() {
   return (
     <header className='bg-[D9D9D9] h-[55px]'>
       <div className="logo">Appa</div>
-      <nav className='font-regular '>
-        <button onClick={handleClickOrder} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
-        <button onClick={handleClickFind} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
-        {user && (
-          <button>Historial</button>
+      <nav className='font-regular'>
+        {/* Mostrar las opciones "Cotizar" y "Localizar" solo si el usuario es cliente */}
+        {user && user.role === 'client' && (
+          <>
+            <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
+            <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
+            <button onClick={() => navigate('/my-orders')} className='hover:bg-white w-[120px] h-[35px] pr-2 pl-2 font-medium rounded'>Tus pedidos</button>
+
+          </>
         )}
+        
+        {/* Mostrar las opciones "Carriers" y "Panel Admin" solo si el usuario es admin */}
+        {user && user.role === 'admin' && (
+          <>
+            <button onClick={() => navigate('/carriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Carriers</button>
+            <button onClick={() => navigate('/admin-panel')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Panel Admin</button>
+          </>
+        )}
+
+        {user && user.role === 'transport' && (
+          <>
+            <button onClick={() => navigate('/carrierorders')} className='hover:bg-white w-[200px] h-[35px] pr-2 pl-2 font-medium rounded'>Pedidos asignados</button>
+          </>
+        )}
+        
         {user ? (
-          <div className="user-menu">
+          <div className="user-menu hover:bg-white w-[120px] h-[35px] pr-2 font-medium rounded">
             <button onClick={toggleDropdown}>
-              <FaUser /> {user.username}
+              <div className='flex relative bottom-1'> <FaUser /> <p className='text-base ml-2 bottom-1 relative'>{user.username}</p></div>
+              
             </button>
             {showDropdown && (
               <div className="dropdown-menu">
-                <button onClick={handleEditUser}>Editar usuario</button>
-                <button onClick={handleChangePassword}>Cambiar contraseña</button>
-                <button onClick={handleLogout}>Cerrar sesión</button>
+                <button className='hover:bg-[#f0f0f0] w-[180px] h-[35px] pr-2 pl-2 mb-2 font-medium' onClick={handleEditUser}>Editar usuario</button>
+                <button className='hover:bg-[#f0f0f0] w-[180px] h-[35px] pr-2 pl-2 mb-2 font-medium' onClick={handleChangePassword}>Cambiar contraseña</button>
+                <button className='hover:bg-[#f0f0f0] w-[180px] h-[50px] pr-2 pl-2 mb-2 font-medium' onClick={handleLogout}>Cerrar sesión</button>
               </div>
             )}
           </div>
         ) : (
           <>
+            <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
+            <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
             <button onClick={handleClickLogin} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Iniciar sesión</button>
             <button onClick={handleClickRegister} className='hover:bg-white w-[130px] h-[35px] pr-2 pl-2 font-medium rounded'>Registrarse</button>
           </>
         )}
       </nav>
-            <Modal isOpen={showEditModal} onClose={handleCloseModal}>
-              <h2>Editar Usuario</h2>
-              <EditUserForm onSubmit={handleEditUser} />
-            </Modal>
 
-            <Modal isOpen={showPasswordModal} onClose={handleCloseModal}>
-              <h2>Cambiar Contraseña</h2>
-              <ChangePasswordForm onSubmit={handleChangePassword} />
-            </Modal>
+      <Modal isOpen={showEditModal} onClose={handleCloseModal}>
+        <h2>Editar Usuario</h2>
+        <EditUserForm onSubmit={handleCloseModal} />
+      </Modal>
+
+      <Modal isOpen={showPasswordModal} onClose={handleCloseModal}>
+        <h2>Cambiar Contraseña</h2>
+        <ChangePasswordForm
+          passwordData={passwordData}
+          onInputChange={handlePasswordInputChange}
+          errors={errors}
+          onSubmit={handlePasswordSubmit}
+        />
+      </Modal>
     </header>
   );
 }

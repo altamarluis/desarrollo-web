@@ -20,7 +20,7 @@ function App() {
           <Route path="/register" element={<RegisterView />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/order" element={<OrderView />} />
-          <Route path="/myorders" element={<OrdersTable />} />
+          <Route path="/my-orders" element={<OrdersTable />} />
           <Route path="/carrierorders" element={<CarrierTable />} />
           <Route path="/carriers" element={<CarriersInventoryTable />} />
         </Routes>

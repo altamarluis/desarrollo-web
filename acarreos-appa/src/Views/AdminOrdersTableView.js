@@ -5,7 +5,10 @@ const columns = [
     {
         name: 'GUÍA PEDIDO',
         cell: row => (
-            <div className='font-semibold pl-3'> {row.orderId} </div>
+            <div className="flex pl-3 flex-col">
+				<div className='font-semibold'>{row.clientName}</div>
+				<div className="text-gray-500">{row.orderId}</div>
+			</div>
         ),
         style: {
             minWidth: '150px',
@@ -19,7 +22,14 @@ const columns = [
         minWidth: '200px',
         hide: 'md',
     },
-
+    
+    {
+        name: 'TRANSPORTADO POR',
+        cell: row => row.carrier,
+        minWidth: '200px',
+        hide: 'md',
+    },
+    
     {
         name: 'ESTADO',
         selector: row => {
@@ -71,36 +81,46 @@ const columns = [
 
 const data = [
     {
+        clientName: 'Aang',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
+        carrier: 'Appa',
         state: 'inactive',
         updateAt: new Date('2024-08-26T10:35:24'),
         price: 100.00
     },
     {
+        clientName: 'Zuko',
         orderId: 102342343,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
+        carrier: 'Bisontico',
         state: 'transit',
         updateAt: new Date('2024-08-22T14:45:12'),
         price: 100.00
     },
     {
+        clientName: 'Zuko',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
+        carrier: 'Bisontuku',
         state: 'delivered',
         updateAt: new Date('2024-08-21T09:07:34'),
         price: 200.00
     },
     {
+        clientName: 'Katara',
         orderId: 102932138,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
+        carrier: 'Bisontoque',
         state: 'delayed',
         updateAt: new Date('2024-08-26T16:15:27'),
         price: 300.00
     },
     {
+        clientName: 'Tio Iroh',
         orderId: 103230934,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
+        carrier: 'Guaco',
         state: 'lost',
         updateAt: new Date('2024-08-27T11:19:45'),
         price: 300.00
@@ -169,11 +189,13 @@ const ExpandedComponent = ({ data }) => {
     return (
     
         <div className="p-4 bg-gray-100 rounded-md">
-            <p className='text-xl'><strong>Descripción completa del pedido:</strong> {data.description}</p>
-            <p className='text-xl'><strong>Estado del pedido:</strong> 
+            <p className='text-base'><strong>Nombre del cliente:</strong> {data.clientName}</p>
+            <p className='text-base'><strong>Descripción completa del pedido:</strong> {data.description}</p>
+            <p className='text-base'><strong>Transportado por:</strong> {data.carrier }</p>
+            <p className='text-base'><strong>Estado del pedido:</strong> 
             <span className={stateStyles[data.state] || 'text-gray-700'}> {stateLabels[data.state] || 'Desconocido'}</span>
             </p>
-            <p className='text-xl'><strong>Última actualización:</strong> {new Date(data.updateAt).toLocaleString('es-ES', {
+            <p className='text-base'><strong>Última actualización:</strong> {new Date(data.updateAt).toLocaleString('es-ES', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
@@ -182,7 +204,7 @@ const ExpandedComponent = ({ data }) => {
                 second: '2-digit',
                 hour12: true
             })}</p>
-            <p className='text-xl'><strong>Costo:</strong> ${data.price.toFixed(2)}</p>
+            <p className='text-base'><strong>Valor a cobrar:</strong> ${data.price.toFixed(2)}</p>
             {/* Puedes agregar más información aquí según tus necesidades */}
         </div>
     );
@@ -190,14 +212,13 @@ const ExpandedComponent = ({ data }) => {
 
 
 
-const OrdersTable = () => {
+const AdminOrdersTable = () => {
 
 const navigate = useNavigate();
     return (
       <div className="font-bold">
           <div className="flex justify-around p-3 font-bold">
-            <h2>Tus pedidos</h2>
-            <button onClick={() => navigate('/order')} className="confirm-button mt-1 bg-[#00C853] h-10 p-2 rounded-md"><p className='text-sm text-black font-bold'>Solicitar Servicio</p></button>
+            <h2>Todos los pedidos</h2>
           </div>
           <div className="justify-items-center pr-20 pl-20 justify-center">
             <Table 
@@ -215,4 +236,4 @@ const navigate = useNavigate();
     );
 };
 
-export default OrdersTable;
+export default AdminOrdersTable;

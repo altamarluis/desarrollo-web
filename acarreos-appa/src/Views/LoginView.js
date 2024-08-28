@@ -56,7 +56,7 @@ function LoginView() {
           <div className="form-section text-sm">
             <form className="register-form" onSubmit={handleSubmit}>
               <h2 className="register-title font-bold pb-2 text-3xl">Iniciar Sesión</h2>
-              <p className='font-medium text-xs pb-4'>¿No tienes una cuenta aún?, <a href="#" className="register-link">Crea una</a></p>
+              <p className='font-medium text-xs pb-4'>¿No tienes una cuenta aún?, <a href="/register" className="register-link hover:underline">Crea una</a></p>
               
               <FormField
                 name="username"
@@ -80,7 +80,7 @@ function LoginView() {
                 icon={FaLock}
               />
               
-              <div className='forgot-psd text-xs font-medium'><a href="#" className="register-link hover:underline">¿Olvidaste tu Contraseña?</a></div>
+              <div className='forgot-psd text-xs font-medium'><a href="#" className="register-link hover:underline"><p className='text-xs font-medium underline'>¿Olvidaste tu Contraseña?</p></a></div>
               
               <div style={{ textAlign: 'center' }}>
                 <button type="submit" className="register-button"><p className='text-sm text-black font-bold'>Iniciar Sesión</p></button>

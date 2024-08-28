@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import '../styles/Header.css';
@@ -19,6 +19,8 @@ function Header() {
     newPassword: '',
     confirmNewPassword: ''
   });
+
+  const dropdownRef = useRef(null);
 
   const handleClickRegister = () => navigate('/register');
   const handleClickLogin = () => navigate('/login');
@@ -74,22 +76,33 @@ function Header() {
       setErrors({});
     }
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Cierra el menú si se hace clic fuera
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // Limpieza
+    };
+  }, []);
 
   return (
     <header className='bg-[D9D9D9] h-[55px]'>
       <div className="logo">Appa</div>
       <nav className='font-regular'>
-        {/* Mostrar las opciones "Cotizar" y "Localizar" solo si el usuario es cliente */}
         {user && user.role === 'client' && (
           <>
-            <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
             <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
-            <button onClick={() => navigate('/my-orders')} className='hover:bg-white w-[120px] h-[35px] pr-2 pl-2 font-medium rounded'>Tus pedidos</button>
+            <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
+            <button onClick={() => navigate('/my-orders')} className='hover:bg-white w-[150px] h-[35px] pr-2 pl-2 font-medium rounded'>Tus pedidos</button>
 
           </>
         )}
         
-        {/* Mostrar las opciones "Carriers" y "Panel Admin" solo si el usuario es admin */}
         {user && user.role === 'admin' && (
           <>
             <button onClick={() => navigate('/carriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Carriers</button>
@@ -106,14 +119,14 @@ function Header() {
         {user ? (
           <div className="user-menu hover:bg-white w-[120px] h-[35px] pr-2 font-medium rounded">
             <button onClick={toggleDropdown}>
-              <div className='flex relative bottom-1'> <FaUser /> <p className='text-base ml-2 bottom-1 relative'>{user.username}</p></div>
+              <div className='flex relative bottom-2'> <FaUser /> <p className='text-base ml-2 bottom-1 relative'>{user.username}</p></div>
               
             </button>
             {showDropdown && (
-              <div className="dropdown-menu">
-                <button className='hover:bg-[#f0f0f0] w-[180px] h-[35px] pr-2 pl-2 mb-2 font-medium' onClick={handleEditUser}>Editar usuario</button>
-                <button className='hover:bg-[#f0f0f0] w-[180px] h-[35px] pr-2 pl-2 mb-2 font-medium' onClick={handleChangePassword}>Cambiar contraseña</button>
-                <button className='hover:bg-[#f0f0f0] w-[180px] h-[50px] pr-2 pl-2 mb-2 font-medium' onClick={handleLogout}>Cerrar sesión</button>
+              <div className="dropdown-menu top-9" ref={dropdownRef}>
+                <button className='hover:bg-[#f0f0f0] w-[215px] h-[50px] pr-2 pl-2 mb-2 font-medium' onClick={handleEditUser}>Editar usuario</button>
+                <button className='hover:bg-[#f0f0f0] w-[215px] h-[50px] pr-2 pl-2 mb-2 font-medium' onClick={handleChangePassword}>Cambiar contraseña</button>
+                <button className='hover:bg-[#f0f0f0] w-[215px] h-[50px] pr-2 pl-2 mb-2 font-medium' onClick={handleLogout}>Cerrar sesión</button>
               </div>
             )}
           </div>

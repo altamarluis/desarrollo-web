@@ -1,5 +1,5 @@
-import React from 'react';
 import Table from '../components/Table';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
     {
@@ -148,11 +148,56 @@ const customStyles = {
     },
 };
 
+const ExpandedComponent = ({ data }) => {
+
+    const stateStyles = {
+        delivered: "text-[#14804A]", 
+        delayed: "text-[#FF4040]", 
+        transit: "text-[#4F5AED]", 
+        lost: "text-[#D12953]", 
+        inactive: "text-[#5A6376]" 
+    };
+
+    const stateLabels = {
+        delivered: "Entregado",
+        delayed: "Retrasado",
+        transit: "En tránsito",
+        lost: "Extraviado",
+        inactive: "Inactivo"
+    };
+
+    return (
+    
+        <div className="p-4 bg-gray-100 rounded-md">
+            <p><strong>Descripción completa:</strong> {data.description}</p>
+            <p><strong>Estado detallado:</strong> 
+            <span className={stateStyles[data.state] || 'text-gray-700'}> {stateLabels[data.state] || 'Desconocido'}</span>
+            </p>
+            <p><strong>Última actualización:</strong> {new Date(data.updateAt).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            })}</p>
+            <p><strong>Costo:</strong> ${data.price.toFixed(2)}</p>
+            {/* Puedes agregar más información aquí según tus necesidades */}
+        </div>
+    );
+};
+
+
+
 const OrdersTable = () => {
+
+const navigate = useNavigate();
     return (
       <div className="font-bold">
-          <div className="justify-items-start p-3 font-bold">
+          <div className="flex justify-around p-3 font-bold">
             <h2>Tus pedidos</h2>
+            <button onClick={() => navigate('/order')} className="confirm-button mt-1 bg-[#00C853] h-10 p-2 rounded-md"><p className='text-sm text-black font-bold'>Solicitar Servicio</p></button>
           </div>
           <div className="justify-items-center pr-20 pl-20 justify-center">
             <Table 
@@ -161,6 +206,9 @@ const OrdersTable = () => {
                 responsive
                 customStyles={customStyles}
                 paginationOptions={paginationComponentOptions}
+                expandableRows
+                expandOnRowClicked
+                expandableRowsComponent={({ data }) => <ExpandedComponent data={data} />}
             />
           </div>  
       </div>

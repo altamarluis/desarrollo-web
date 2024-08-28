@@ -125,7 +125,7 @@ const SolicitarServicio = () => {
                 <label>Costo:</label>
                 <input className='costo' type="text" value={`$ ${cost.toFixed(1)}`} readOnly disabled/>
             </div>    
-            <button type="submit" className="confirm-button">Solicitar Servicio</button>
+            <button type="submit" className="confirm-button mt-1 bg-[#00C853] h-10 p-2 rounded-md"><p className='text-sm text-black font-bold'>Solicitar Servicio</p></button>
         </div>
       </form>
     </div>

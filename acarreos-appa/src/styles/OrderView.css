@@ -115,15 +115,6 @@
   }
   
   .confirm-button {
-    width:fit-content;
-    height: fit-content;
-    padding: 1rem;
-    background-color: #00C853;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 0.5rem;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
 

@@ -77,10 +77,9 @@ function RegisterView() {
           <div className="form-section text-sm">
             <form className="register-form" onSubmit={handleSubmit}>
               <h2 className="register-title font-bold pb-2 text-3xl">Crear una cuenta</h2>
-              <p className='font-medium text-xs pb-4'>¿Ya tienes una cuenta? <a href="#" className="register-link">Inicia Sesión</a></p>
+              <p className='font-medium text-xs pb-4'>¿Ya tienes una cuenta? <a href="#" className="register-link  hover:underline">Inicia Sesión</a></p>
               
               <FormField
-                className='text-xs'
                 name="username"
                 label="Nombre de usuario*"
                 type="text"
@@ -92,7 +91,6 @@ function RegisterView() {
               />
 
               <FormField
-                className='text-xs'
                 name="id"
                 label="Número de Indentidad*"
                 type="text"
@@ -159,7 +157,7 @@ function RegisterView() {
               />
               
               <div style={{ textAlign: 'center' }}>
-                <button type="submit" className="register-button">Registrarme</button>
+                <button type="submit" className="register-button mt-1 bg-[#00C853] h-10 p-2 rounded-md mb-10"><p className='text-sm text-black font-bold'>Registrarme</p></button>
               </div>
             </form>
           </div>

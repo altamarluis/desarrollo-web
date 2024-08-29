@@ -63,7 +63,7 @@ function RegisterView() {
             location: formData.location || 'No especificada'
         };
 
-        Database.push(newUser);
+        Database.users.push(newUser);
         alert('Usuario registrado con éxito');
         login(newUser);
         navigate('/');

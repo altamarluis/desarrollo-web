@@ -40,7 +40,7 @@ function LoginView() {
         if (Object.keys(formErrors).length > 0) {
           setErrors(formErrors);
         } else {
-          const user = Database.find(u => u.username.toLowerCase() === formData.username.toLowerCase() && u.password === formData.password);
+          const user = Database.users.find(u => u.username.toLowerCase() === formData.username.toLowerCase() && u.password === formData.password);
           if (user) {
             login(user);
             navigate('/');

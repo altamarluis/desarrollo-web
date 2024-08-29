@@ -20,4 +20,8 @@ export const updateParameters = (newParameters) => {
   Database.parameters = { ...Database.parameters, ...newParameters };
 };
 
+export const dbDeleteUser = (userId) => {
+  Database.users = Database.users.filter(user => user.id !== userId);
+};
+
   export default Database;

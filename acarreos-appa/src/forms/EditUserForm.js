@@ -7,7 +7,7 @@ import { UserContext } from '../services/userContext';
 
 const EditUserForm = ({ onSubmit }) => {
     const navigate = useNavigate();
-    const { user, logout, updateUser } = useContext(UserContext);
+    const { user, logout, updateUser, deleteUser } = useContext(UserContext);
     const [editedUser, setEditedUser] = useState(user || {});
     const [errors, setErrors] = useState({});
 
@@ -42,9 +42,9 @@ const EditUserForm = ({ onSubmit }) => {
 
   const handleDeleteAccount = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-      // Aquí iría la lógica para eliminar la cuenta
-      console.log("Cuenta eliminada");
+      deleteUser(user.id)
       logout();
+      onSubmit();
       navigate('/');
     }
   };

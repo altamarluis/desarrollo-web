@@ -109,6 +109,7 @@ function Header() {
         
         {user && user.role === 'admin' && (
           <>
+            <button onClick={() => navigate('/addCarriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Añadir Bisontes</button>
             <button onClick={() => navigate('/carriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Bisontes</button>
             <button onClick={handleChangeParameters} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Parametros</button>
           </>

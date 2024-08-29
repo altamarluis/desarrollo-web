@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DocumentForm, ObjectForm, MovingForm } from '../components/OrderTypes.js'
 import '../styles/OrderView.css';
 import { FaArrowLeft } from 'react-icons/fa';
+import { UserContext } from '../services/userContext';
+
 
 const SolicitarServicio = () => {
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [serviceType, setServiceType] = useState('documento');
   const [cost, setCost] = useState(0.0);
   const [documentData, setDocumentData] = useState({
@@ -80,8 +85,8 @@ const SolicitarServicio = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para procesar la solicitud
-    console.log('Servicio solicitado:', serviceType);
+    if (user) alert("Pedido Solicitado")
+    else navigate('/login')
   };
 
   return (

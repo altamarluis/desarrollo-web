@@ -26,7 +26,7 @@ const SolicitarServicio = () => {
     date: '',
     width: 0,
     height:0,
-    length:0,
+    lengthh:0,
     cityOfOrigin: '',
     cityOfDestiny:'',
     addressOfOrigin: '',
@@ -65,7 +65,7 @@ const SolicitarServicio = () => {
         calculatedCost = (distance * 2) + (documentData.value * 0.3) + (documentData.weight * 0.05);
         break;
       case 'objeto':
-        calculatedCost = (distance * 2) + (objectData.value * 0.2) + (objectData.weight * 0.1) + (objectData.width * objectData.height * objectData.length * 0.01);
+        calculatedCost = (distance * 2) + (objectData.value * 0.2) + (objectData.weight * 0.1) + (objectData.width * objectData.height * objectData.lengthh * 0.01);
         break;
       case 'mudanza':
         if (movingData.size.value === 'small') calculatedCost = (distance * 2) + movingData.value * 0.3 + 20;

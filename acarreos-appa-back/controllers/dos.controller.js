@@ -19,7 +19,29 @@ const update = async(req,res) => {
     }
 }
 
+
+const deleteBison = async(req,res) => {
+    try {
+        const { bison_id } = req.body;
+        const response = await dosModel.deleteBison(bison_id);
+        res.json(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getAllBisons = async(_, res) => {
+    try {
+        const response = await dosModel.findAllBisons();
+        res.json(response);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const dosController = {
     getAll,
     update,
+    deleteBison,
+    getAllBisons,
 };

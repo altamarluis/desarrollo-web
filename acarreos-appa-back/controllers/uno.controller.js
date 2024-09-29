@@ -1,3 +1,4 @@
+import { dosModel } from "../models/dos.model.js";
 import { unoModel } from "../models/uno.model.js";
 
 const getAll = async(_, res) => {
@@ -34,7 +35,12 @@ const registerClient = async(req,res) => {
 const registerTransporter = async(req,res) => {
     try {
         const role = "transporter";
-        const { user_id, username, email, nationality, password, location = null} = req.body;
+        const { user_id, username, bisonname, email, nationality, password, location = null} = req.body;
+        const status = 'Disponible';
+        const rest_end_date = null;
+        const km_traveled = 0;
+        const transporter_id = user_id;
+        await dosModel.createBison(bisonname, transporter_id, status, km_traveled, rest_end_date);
         const response = await unoModel.createUser(user_id, role,username,email,nationality,password,location);
         res.json(response);
     } catch (error) {

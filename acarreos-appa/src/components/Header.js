@@ -93,7 +93,7 @@ function Header() {
   return (
     <header className='bg-[D9D9D9] h-[55px]'>
       <div className="logo">Appa</div>
-      <nav className='font-regular'>
+      <nav className='hidden sm:flex font-regular'>
         {user && user.role === 'client' && (
           <>
             <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>

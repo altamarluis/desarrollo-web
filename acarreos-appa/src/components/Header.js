@@ -6,6 +6,7 @@ import { UserContext } from '../services/userContext';
 import Modal from './Modal';
 import EditUserForm from '../forms/EditUserForm';
 import ChangePasswordForm from '../forms/ChangePasswordForm';
+import EditParametersForm from '../forms/EditParametersForm';
 
 function Header() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showParametersModal, setShowParametersModal] = useState(false);
   const [errors, setErrors] = useState({});
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -22,8 +24,6 @@ function Header() {
 
   const dropdownRef = useRef(null);
 
-  const handleClickRegister = () => navigate('/register');
-  const handleClickLogin = () => navigate('/login');
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -39,11 +39,16 @@ function Header() {
     setShowDropdown(false);
   };
 
+  const handleChangeParameters = () => {
+    setShowParametersModal(!showParametersModal);
+  };
+
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
   const handleCloseModal = () => {
     setShowEditModal(false);
     setShowPasswordModal(false);
+    setShowParametersModal(false)
     setErrors({});
   };
 
@@ -99,14 +104,14 @@ function Header() {
             <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
             <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
             <button onClick={() => navigate('/my-orders')} className='hover:bg-white w-[150px] h-[35px] pr-2 pl-2 font-medium rounded'>Tus pedidos</button>
-
           </>
         )}
         
         {user && user.role === 'admin' && (
           <>
-            <button onClick={() => navigate('/carriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Carriers</button>
-            <button onClick={() => navigate('/admin-panel')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Panel Admin</button>
+            <button onClick={() => navigate('/addCarriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Añadir Bisontes</button>
+            <button onClick={() => navigate('/carriers')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Bisontes</button>
+            <button onClick={handleChangeParameters} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Parametros</button>
           </>
         )}
 
@@ -134,8 +139,8 @@ function Header() {
           <>
             <button onClick={() => navigate('/order')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Cotizar</button>
             <button onClick={() => navigate('/')} className='hover:bg-white w-[100px] h-[35px] pr-2 pl-2 font-medium rounded'>Localizar</button>
-            <button onClick={handleClickLogin} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Iniciar sesión</button>
-            <button onClick={handleClickRegister} className='hover:bg-white w-[130px] h-[35px] pr-2 pl-2 font-medium rounded'>Registrarse</button>
+            <button onClick={() => navigate('/login')} className='hover:bg-white w-[130px] h-[35px] font-medium rounded'>Iniciar sesión</button>
+            <button onClick={() => navigate('/register')} className='hover:bg-white w-[130px] h-[35px] pr-2 pl-2 font-medium rounded'>Registrarse</button>
           </>
         )}
       </nav>
@@ -153,6 +158,11 @@ function Header() {
           errors={errors}
           onSubmit={handlePasswordSubmit}
         />
+      </Modal>
+
+      <Modal isOpen={showParametersModal} onClose={handleCloseModal}>
+        <h2>Editar Parametros</h2>
+        <EditParametersForm onSubmit={handleCloseModal}/>
       </Modal>
     </header>
   );

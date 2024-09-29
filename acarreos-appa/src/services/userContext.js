@@ -1,21 +1,22 @@
 import React, { createContext, useState, useEffect } from 'react';
-import Database from '../database/Database';
+import Database, { updateParameters, dbDeleteUser } from '../database/Database'
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
  
   const [user, setUser] = useState(null);
+  const [parameters, setParameters] = useState(Database.parameters);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setParameters(Database.parameters);
   }, []);
 
   const login = (userData) => {
-    console.log(userData)
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
@@ -26,8 +27,28 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
+  const updateUser = (updatedUserData) => {
+    const index = Database.users.findIndex(item => item.id === updatedUserData.id);
+    if (index !== -1) {
+      Database.users[index] = { ...Database[index], ...updatedUserData };
+      setUser(updatedUserData);
+      localStorage.setItem('user', JSON.stringify(updatedUserData));
+    }
+  };
+
+  const deleteUser = (userId) => {
+    dbDeleteUser(userId);
+    logout();
+  };
+
+  
+  const updateGlobalParameters = (newParameters) => {
+    setParameters(prevParameters => ({ ...prevParameters, ...newParameters }));
+    updateParameters(newParameters);
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser, deleteUser, parameters, updateGlobalParameters  }}>
       {children}
     </UserContext.Provider>
   );

@@ -8,7 +8,7 @@ import Database from '../database/Database';
 import { UserContext } from '../services/userContext';
 import { useNavigate } from 'react-router-dom';
 
-function RegisterView() {
+function RegisterCarrierView() {
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
     const [formData, setFormData] = useState({
@@ -54,7 +54,7 @@ function RegisterView() {
         } else {
           setErrors({});
           const newUser = {
-            role: 'client',  // Rol por defecto
+            role: 'transport',  // Rol por defecto
             id: parseInt(formData.id),
             username: formData.username,
             email: formData.email,
@@ -76,8 +76,7 @@ function RegisterView() {
         <div className="register-container">
           <div className="form-section text-sm">
             <form className="register-form" onSubmit={handleSubmit}>
-              <h2 className="register-title font-bold pb-2 text-3xl">Crear una cuenta</h2>
-              <p className='font-medium text-xs pb-4'>¿Ya tienes una cuenta?, <a href="/login" className="register-link  hover:underline">Inicia Sesión</a></p>
+              <h2 className="register-title font-bold pb-2 text-3xl">Registrar Transportista</h2>
               
               <FormField
                 name="username"
@@ -167,4 +166,4 @@ function RegisterView() {
     );
   }
   
-  export default RegisterView;
+  export default RegisterCarrierView;

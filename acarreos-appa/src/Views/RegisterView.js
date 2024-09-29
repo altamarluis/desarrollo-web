@@ -73,7 +73,7 @@ function RegisterView() {
 
     return (
       <div>
-        <div className="register-container">
+        <div className="register-container flex-col">
           <div className="form-section text-sm">
             <form className="register-form" onSubmit={handleSubmit}>
               <h2 className="register-title font-bold pb-2 text-3xl">Crear una cuenta</h2>

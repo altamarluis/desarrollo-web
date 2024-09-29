@@ -146,7 +146,7 @@ function Header() {
       </nav>
 
       {showMenu && (
-        <nav className="sm:hidden flex flex-col bg-white absolute rounded w-40 top-[55px] right-0 shadow-lg p-4">
+        <nav className="sm:hidden flex flex-col bg-white absolute rounded w-40 top-[55px] right-0 shadow-lg p-4 z-10">
           {user && user.role === 'client' && (
             <>
               <button onClick={() => navigate('/')} className="hover:bg-gray-200 w-full h-[35px] pr-2 pl-2 font-medium rounded">Localizar</button>

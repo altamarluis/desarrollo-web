@@ -39,47 +39,50 @@ const updateOrderStatus = async(req,res) => {
 }
 
 
-const getOrderStatus = async(req,res) => {
+const getOrderStatus = async (req, res) => {
     try {
-        const { tracking_code } = req.body;
+        const { tracking_code } = req.query;
         const response = await cuatroModel.findOrderByCode(tracking_code);
         res.json(response);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
-const getClientOrders = async(req,res) => {
+const getClientOrders = async (req, res) => {
     try {
-        const { user_id } = req.body;
+        const { user_id } = req.query;
         const response = await cuatroModel.findOrdersByUser(user_id);
 
         const formattedOrders = response.map(order => {
-        const { tracking_code, status, last_updated_date, declared_value, ...otherDetails } = order;
-        const description = `Pedido de tipo ${otherDetails.order_type} con origen en ${otherDetails.origin_address} y destino en ${otherDetails.destination_address}, programado el ${otherDetails.service_date}.`;
+            const { tracking_code, status, last_updated_date, declared_value, ...otherDetails } = order;
+            const description = `Pedido de tipo ${otherDetails.order_type} con origen en ${otherDetails.origin_address} y destino en ${otherDetails.destination_address}, programado el ${otherDetails.service_date}.`;
 
-        return {
-            tracking_code,
-            status,
-            last_updated_date,
-            declared_value,
-            description
-        };
-    });
+            return {
+                tracking_code,
+                status,
+                last_updated_date,
+                declared_value,
+                description
+            };
+        });
+
         res.json(formattedOrders);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
-const getTransporterOrders = async(req,res) => {
+const getTransporterOrders = async (req, res) => {
     try {
-        const { transporter_id } = req.body;
+        const { transporter_id } = req.query; // Cambiamos req.body a req.query
         const response = await cuatroModel.findOrdersByTransporter(transporter_id);
         const formattedOrders = response.map(order => {
             const { user_id, tracking_code, status, last_updated_date, declared_value, ...otherDetails } = order;
             const description = `Pedido de tipo ${otherDetails.order_type} con origen en ${otherDetails.origin_address} y destino en ${otherDetails.destination_address}, programado el ${otherDetails.service_date}.`;
-    
+
             return {
                 user_id,
                 tracking_code,
@@ -89,11 +92,13 @@ const getTransporterOrders = async(req,res) => {
                 description
             };
         });
-            res.json(formattedOrders);
+
+        res.json(formattedOrders);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
 export const cuatroController = {
     getOrderStatus,

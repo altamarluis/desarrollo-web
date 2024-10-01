@@ -70,11 +70,12 @@ const changePassword = async(req,res) => {
 
 const deleteUser = async(req,res) => {
     try {
-        const { user_id } = req.body;
+        const { user_id } = req.params;
         const response = await unoModel.deleteUser(user_id);
         res.json(response);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
 

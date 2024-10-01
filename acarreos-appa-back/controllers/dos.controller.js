@@ -9,26 +9,27 @@ const getAll = async(_, res) => {
     }
 };
 
-const update = async(req,res) => {
+const update = async (req, res) => {
     try {
-        const { max_km_per_bison, bison_rest_days, distance_rate, weight_rate, declared_value_rate, medium_dimension_charge, large_dimension_charge} = req.body;
+        const { max_km_per_bison, bison_rest_days, distance_rate, weight_rate, declared_value_rate, medium_dimension_charge, large_dimension_charge } = req.body;
         const response = await dosModel.updateParams(max_km_per_bison, bison_rest_days, distance_rate, weight_rate, declared_value_rate, medium_dimension_charge, large_dimension_charge);
         res.json(response);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
-
-const deleteBison = async(req,res) => {
+const deleteBison = async (req, res) => {
     try {
-        const { bison_id } = req.body;
+        const { bison_id } = req.params;
         const response = await dosModel.deleteBison(bison_id);
         res.json(response);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
 const getAllBisons = async(_, res) => {
     try {

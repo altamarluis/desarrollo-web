@@ -1,8 +1,24 @@
-
 .register-container {
     display: flex;
+    flex-direction: row;
 }
-  
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column; /* Cambia la dirección para que se apile verticalmente */
+    }
+    
+    .map-section {
+        display: none; /* Oculta completamente la sección del mapa */
+    }
+
+    .form-section {
+        flex: 1; /* El formulario ocupa el 100% del espacio disponible */
+        padding: 1rem; /* Ajusta el padding si es necesario */
+    }
+}
+
 .form-section {
     flex: 0 0 30%;
     padding: 2rem;
@@ -20,11 +36,11 @@
 .register-form {
     margin: 0 auto;
 }
-  
+
 .form-group label {
     display: block;
     margin-bottom: 0;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .register-input {
@@ -36,7 +52,7 @@
 }
 
 .register-button {
-    width:fit-content;
+    width: fit-content;
     padding: 10px;
     background-color: #00C853;
     color: white;
@@ -49,8 +65,8 @@
 
 .register-button:hover {
     background-color: #009b43;
-    transform: scale(1.05); 
-  }
+    transform: scale(1.05);
+}
 
 .register-title {
     text-align: center;
@@ -59,10 +75,9 @@
 }
 
 p {
-    
     margin-top: 0;
     text-align: center;
-  }
+}
 
 .forgot-psd {
     margin-top: 0;
@@ -74,6 +89,10 @@ p {
     text-decoration: none;
 }
 
-
-
-  
+.map-section {
+    background-image: url('../assets/map-image2.jpg');
+    background-size: contain;
+    background-repeat: repeat-y; /* Esto hará que la imagen se repita verticalmente */
+    background-position: center;
+    height: 100vh; /* Asegura que la sección ocupe toda la altura de la pantalla */
+  }

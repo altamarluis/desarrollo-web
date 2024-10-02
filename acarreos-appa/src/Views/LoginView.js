@@ -50,7 +50,7 @@ function LoginView() {
 
   return (
     <div className=''>
-      <div className="register-container flex-col">
+      <div className="register-container">
         <div className="form-section text-sm">
           <form className="register-form" onSubmit={handleSubmit}>
             <h2 className="register-title font-bold pb-2 text-3xl">Iniciar Sesión</h2>

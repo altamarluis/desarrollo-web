@@ -30,22 +30,36 @@ export const UserProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('user');
   };
-
   const updateUser = async (updatedUserData) => {
     try {
-      const response = await axios.patch(`http://34.176.155.184:5000/prueba/${updatedUserData.id}`, updatedUserData);
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const userId = storedUser?.user_id;  // Obtiene el user_id del usuario almacenado
+      if (!userId) {
+        throw new Error("El user_id no está presente");
+      }
+  
+      const response = await axios.patch('http://34.176.155.184:5000/api/updateUser', {
+        user_id: userId,  // ID del usuario que se va a actualizar
+        newUser_id: updatedUserData.id, // El nuevo ID (si se actualiza)
+        username: updatedUserData.username,
+        email: updatedUserData.email,
+        nationality: updatedUserData.nationality,
+        location: updatedUserData.location,
+      });
+  
       const updatedUser = response.data;
-
+  
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
     } catch (error) {
       console.error('Error updating user:', error);
     }
   };
-
+  
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(`http://34.176.155.184:5000/prueba/${userId}`);
+      const response = await axios.delete(`http://34.176.155.184:5000/api/deleteUser/${userId}`);
+      console.log('Usuario eliminado:', response.data);
       logout();
     } catch (error) {
       console.error('Error deleting user:', error);

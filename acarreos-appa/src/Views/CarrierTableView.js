@@ -29,22 +29,48 @@ const CarrierTable = () => {
         fetchData();
     }, []);
 
-    const handleEditClick = (orderId) => {
-        setSelectedOrder(orderId);
+    const handleEditClick = (order) => {
+        setSelectedOrder(order); // Cambiamos a pasar el objeto completo
         setIsModalOpen(true);
     };
 
-    const handleSave = (orderId, newState) => {
-        const updatedData = ordersData.map(order => {
-            if (order.tracking_code === orderId) {
-                return { ...order, status: newState };
+    const handleSave = async (index, newState) => {
+        const orderId = ordersData[index].tracking_code; // Utiliza el tracking_code como order_id para la API
+        try {
+            const response = await fetch('http://34.176.155.184:5000/api/updateOrderStatus', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    order_id: orderId, // Enviamos el tracking_code como order_id
+                    estado: newState,   // El nuevo estado del pedido
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error al actualizar el estado del pedido');
             }
-            return order;
-        });
-
-        setOrdersData(updatedData);
-        setIsModalOpen(false);
+    
+            const updatedOrder = await response.json();
+    
+            // Actualizamos el estado del pedido en la tabla usando el tracking_code
+            const updatedData = ordersData.map((order, idx) => {
+                if (idx === index) { // Comparamos por índice
+                    return { ...order, status: updatedOrder.status };
+                }
+                return order;
+            });
+    
+            setOrdersData(updatedData);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
+    
+    
+    
 
     const columns = [
         {
@@ -55,14 +81,14 @@ const CarrierTable = () => {
                 </div>
             ),
             style: {
-                minWidth: '150px',
+                
                 justifyContent: 'start',
             }
         },
         {
             name: 'DESCRIPCIÓN',
             cell: row => row.description,
-            minWidth: '200px',
+           
             hide: 'md',
         },
         {
@@ -83,14 +109,14 @@ const CarrierTable = () => {
                         </div>
                         <button
                             className='ml-2 p-1 rounded-full bg-blue-200 hover:bg-blue-300 focus:outline-none'
-                            onClick={() => handleEditClick(row.tracking_code)}
+                            onClick={() => handleEditClick(row)}
                         >
                             <MdModeEdit className='w-4 h-4' />
                         </button>
                     </div>
                 );
             },
-            minWidth: '150px',
+            
         },
         {
             name: 'ÚLTIMA ACTUALIZACIÓN',
@@ -103,14 +129,14 @@ const CarrierTable = () => {
                 second: '2-digit',
                 hour12: true
             }),
-            minWidth: '200px',
+           
         },
         {
             name: 'VALOR A COBRAR',
             cell: row => (
                 <div className='font-semibold'>${row.declared_value}</div>
             ),
-            minWidth: '100px', 
+            
         }
     ];
 
@@ -191,11 +217,12 @@ const CarrierTable = () => {
             </div>
             {isModalOpen && selectedOrder && (
                 <EditOrderModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    order={selectedOrder}
-                    onSave={handleSave}
-                />
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                order={selectedOrder}
+                onSave={handleSave}
+                ordersData={ordersData} // Pasar ordersData como prop
+            />            
             )}
         </div>
     );

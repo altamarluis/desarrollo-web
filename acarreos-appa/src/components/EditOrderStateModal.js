@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import Modal from './Modal'; // Importa tu componente Modal
 
-const EditOrderModal = ({ isOpen, onClose, order, onSave }) => {
+const EditOrderModal = ({ isOpen, onClose, order, onSave, ordersData }) => {
   const [selectedState, setSelectedState] = useState(order.state);
 
   const handleSave = () => {
-    onSave(order.orderId, selectedState); // Llama a la función de guardado en CarrierTable
+    // Encuentra el índice del pedido en ordersData
+    const index = ordersData.findIndex(o => o.tracking_code === order.tracking_code);
+    
+    // Llama a la función de guardado en CarrierTable con el índice
+    onSave(index, selectedState); 
     onClose(); // Cierra el modal
   };
 
@@ -19,11 +23,11 @@ const EditOrderModal = ({ isOpen, onClose, order, onSave }) => {
           value={selectedState}
           onChange={(e) => setSelectedState(e.target.value)}
         >
-          <option value="delivered">Entregado</option>
-          <option value="delayed">Retrasado</option>
-          <option value="transit">En transito</option>
-          <option value="lost">Extraviado</option>
-          <option value="inactive">Inactivo</option>
+          <option value="Entregado">Entregado</option>
+          <option value="Retrasado">Retrasado</option>
+          <option value="En tránsito">En tránsito</option>
+          <option value="Extraviado">Extraviado</option>
+          <option value="Inactivo">Inactivo</option>
         </select>
       </div>
       <div className="flex justify-end">

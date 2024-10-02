@@ -12,8 +12,6 @@ export const UserProvider = ({ children }) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-
-    fetchParameters();
   }, []);
 
   const login = async (credentials) => {
@@ -35,7 +33,7 @@ export const UserProvider = ({ children }) => {
 
   const updateUser = async (updatedUserData) => {
     try {
-      const response = await axios.put(`http://34.176.155.184:5000/users/${updatedUserData.id}`, updatedUserData);
+      const response = await axios.patch(`http://34.176.155.184:5000/prueba/${updatedUserData.id}`, updatedUserData);
       const updatedUser = response.data;
 
       setUser(updatedUser);
@@ -47,70 +45,45 @@ export const UserProvider = ({ children }) => {
 
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(`http://34.176.155.184:5000/users/${userId}`);
+      await axios.delete(`http://34.176.155.184:5000/prueba/${userId}`);
       logout();
     } catch (error) {
       console.error('Error deleting user:', error);
     }
   };
 
-  const changePassword = async (newPassword) => {
-    if (!user) {
-      throw new Error("El usuario no está autenticado");
-    }
-
+  const updateGlobalParameters = async (newParameters) => {
     try {
+      const response = await axios.patch('http://34.176.155.184:5000/parameters', newParameters);
+      const updatedParameters = response.data;
+      setParameters(prevParameters => ({ ...prevParameters, ...updatedParameters }));
+    } catch (error) {
+      console.error('Error updating parameters:', error);
+    }
+  };
+
+  const changePassword = async (newPassword) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const userId = storedUser?.user_id;  // Verificar que el user_id esté presente
+      if (!userId) {
+        throw new Error("El user_id no está presente");
+      }
+
       const response = await axios.patch('http://34.176.155.184:5000/api/changePassword', {
-        user_id: user.id,
+        user_id: userId,
         password: newPassword
       });
 
-      if (response.status === 200) {
-        const updatedUser = response.data;
-        console.log(response.data);
-        return { success: true, user: updatedUser };
-      }
+      return { success: true, data: response.data };
     } catch (error) {
-      console.error("Error al cambiar la contraseña:", error);
-      return { success: false, message: error.response?.data?.message || "Error en la solicitud" };
+      console.error('Error changing password:', error);
+      return { success: false, message: 'Error changing password' };
     }
   };
-
-  const fetchParameters = async () => {
-    try {
-      const response = await axios.get('http://34.176.155.184:5000/api/parameters');
-      setParameters(response.data);
-    } catch (error) {
-      console.error('Error fetching parameters:', error);
-    }
-  };
-
-  const updateGlobalParameters = async (newParameters) => {
-    try {
-      // Llamar al backend enviando los parámetros en el formato correcto
-      const response = await axios.patch('http://34.176.155.184:5000/api/updateParams', {
-        max_km_per_bison: newParameters.max_km_per_bison,
-        bison_rest_days: newParameters.bison_rest_days,
-        distance_rate: newParameters.distance_rate,
-        weight_rate: newParameters.weight_rate,
-        declared_value_rate: newParameters.declared_value_rate,
-        medium_dimension_charge: newParameters.medium_dimension_charge,
-        large_dimension_charge: newParameters.large_dimension_charge
-      });
-  
-      const updatedParameters = response.data;
-      setParameters(prevParameters => ({ ...prevParameters, ...updatedParameters }));
-  
-      return updatedParameters; 
-    } catch (error) {
-      console.error('Error updating parameters:', error);
-      throw new Error('No se pudieron actualizar los parámetros'); 
-    }
-  };
-  
 
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser, changePassword, deleteUser, parameters, fetchParameters, updateGlobalParameters }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser, deleteUser, parameters, updateGlobalParameters, changePassword }}>
       {children}
     </UserContext.Provider>
   );

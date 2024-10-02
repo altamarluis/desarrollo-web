@@ -1,56 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '../components/Table';
 import { MdModeEdit } from "react-icons/md";
 import EditOrderModal from '../components/EditOrderStateModal';
 
-
 const CarrierTable = () => {
-    
-    const data = [
-        {   
-            clientName: 'Aang',
-            orderId: 102932138,
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-            state: 'inactive',
-            updateAt: new Date('2024-08-26T10:35:24'),
-            price: 100.00
-        },
-        {
-            clientName: 'Soka',
-            orderId: 102342343,
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-            state: 'transit',
-            updateAt: new Date('2024-08-22T14:45:12'),
-            price: 100.00
-        },
-        {
-            clientName: 'Tio Iroh',
-            orderId: 102932139,
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-            state: 'delivered',
-            updateAt: new Date('2024-08-21T09:07:34'),
-            price: 200.00
-        },
-        {
-            clientName: 'Katara',
-            orderId: 102932140,
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-            state: 'delayed',
-            updateAt: new Date('2024-08-26T16:15:27'),
-            price: 300.00
-        },
-        {
-            clientName: 'Principe Zuko',
-            orderId: 103230935,
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-            state: 'lost',
-            updateAt: new Date('2024-08-27T11:19:45'),
-            price: 300.00
-        },
-    ];
+    const [ordersData, setOrdersData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [ordersData, setOrdersData] = useState(data); // Copia de los datos originales
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://34.176.155.184:5000/api/transporterOrders?transporter_id=2');
+                if (!response.ok) {
+                    throw new Error('Error al obtener los datos');
+                }
+                const data = await response.json();
+                setOrdersData(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleEditClick = (orderId) => {
         setSelectedOrder(orderId);
@@ -58,17 +35,15 @@ const CarrierTable = () => {
     };
 
     const handleSave = (orderId, newState) => {
-        // Aquí actualizamos solo el pedido con el `orderId` seleccionado
         const updatedData = ordersData.map(order => {
-            // Solo actualiza el estado del pedido cuyo `orderId` coincide
-            if (order.orderId === orderId) {
-                return { ...order, state: newState }; // Actualizamos solo este pedido
+            if (order.tracking_code === orderId) {
+                return { ...order, status: newState };
             }
-            return order; // Retornamos los demás sin cambios
+            return order;
         });
 
-        setOrdersData(updatedData); // Actualiza los datos con el nuevo estado
-        setIsModalOpen(false); // Cierra el modal después de guardar
+        setOrdersData(updatedData);
+        setIsModalOpen(false);
     };
 
     const columns = [
@@ -76,8 +51,7 @@ const CarrierTable = () => {
             name: 'PEDIDO',
             cell: row => (
                 <div className="flex pl-3 flex-col">
-                    <div className='font-semibold'>{row.clientName}</div>
-                    <div className="text-gray-500">{row.orderId}</div>
+                    <div className='font-semibold'>{row.tracking_code}</div>
                 </div>
             ),
             style: {
@@ -95,29 +69,21 @@ const CarrierTable = () => {
             name: 'ESTADO',
             selector: row => {
                 const stateStyles = {
-                    delivered: "bg-[#E1FCEF] text-[#14804A]", 
-                    delayed: "bg-[#FFFBA7] text-[#FF4040]", 
-                    transit: "bg-[#F0F1FA] text-[#4F5AED]", 
-                    lost: "bg-[#FAF0F3] text-[#D12953]", 
-                    inactive: "bg-[#E9EDF5] text-[#5A6376]" 
-                };
-
-                const stateLabels = {
-                    delivered: "Entregado",
-                    delayed: "Retrasado",
-                    transit: "En tránsito",
-                    lost: "Extraviado",
-                    inactive: "Inactivo"
+                    "En tránsito": "bg-[#F0F1FA] text-[#4F5AED]", 
+                    "Entregado": "bg-[#E1FCEF] text-[#14804A]", 
+                    "Retrasado": "bg-[#FFFBA7] text-[#FF4040]", 
+                    "Extraviado": "bg-[#FAF0F3] text-[#D12953]", 
+                    "Inactivo": "bg-[#E9EDF5] text-[#5A6376]"
                 };
 
                 return (
                     <div className='flex items-center'>
-                        <div className={`flex w-[100px] h-[30px] font-medium rounded-full justify-center items-center ${stateStyles[row.state] || 'bg-gray-200 text-gray-700'}`}>
-                            {stateLabels[row.state] || 'Desconocido'}
+                        <div className={`flex w-[100px] h-[30px] font-medium rounded-full justify-center items-center ${stateStyles[row.status] || 'bg-gray-200 text-gray-700'}`}>
+                            {row.status}
                         </div>
                         <button
                             className='ml-2 p-1 rounded-full bg-blue-200 hover:bg-blue-300 focus:outline-none'
-                            onClick={() => handleEditClick(row)}
+                            onClick={() => handleEditClick(row.tracking_code)}
                         >
                             <MdModeEdit className='w-4 h-4' />
                         </button>
@@ -128,7 +94,7 @@ const CarrierTable = () => {
         },
         {
             name: 'ÚLTIMA ACTUALIZACIÓN',
-            cell: row => new Date(row.updateAt).toLocaleString('es-ES', {
+            cell: row => new Date(row.last_updated_date).toLocaleString('es-ES', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
@@ -142,22 +108,20 @@ const CarrierTable = () => {
         {
             name: 'VALOR A COBRAR',
             cell: row => (
-                <div className='font-semibold'> ${row.price.toFixed(2)} </div>
+                <div className='font-semibold'>${row.declared_value}</div>
             ),
             minWidth: '100px', 
         }
     ];
+
     const paginationComponentOptions = {
         rowsPerPageText: 'Filas por página',
         rangeSeparatorText: 'de',
         selectAllRowsItem: true,
         selectAllRowsItemText: 'Todos',
     };
-    
+
     const customStyles = {
-        table: {
-            style: {},
-        },
         cells: {
             style: {
                 fontSize: '14px',
@@ -180,79 +144,60 @@ const CarrierTable = () => {
                 justifyContent: 'center',
                 borderWidth: '1px',
             }
-        },
-        pagination: {
-            style: {
-                
-            }
-        },
+        }
     };
-    const ExpandedComponent = ({ data }) => {
 
-        const stateStyles = {
-            delivered: "text-[#14804A]", 
-            delayed: "text-[#FF4040]", 
-            transit: "text-[#4F5AED]", 
-            lost: "text-[#D12953]", 
-            inactive: "text-[#5A6376]" 
-        };
-    
-        const stateLabels = {
-            delivered: "Entregado",
-            delayed: "Retrasado",
-            transit: "En tránsito",
-            lost: "Extraviado",
-            inactive: "Inactivo"
-        };
-    
-        return (
-        
-            <div className="p-4 bg-gray-100 rounded-md">
-                <p className='text-base'><strong>Descripción completa del pedido:</strong> {data.description}</p>
-                <p className='text-base'><strong>Estado del pedido:</strong> 
-                <span className={stateStyles[data.state] || 'text-gray-700'}> {stateLabels[data.state] || 'Desconocido'}</span>
-                </p>
-                <p className='text-base'><strong>Última actualización:</strong> {new Date(data.updateAt).toLocaleString('es-ES', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true
-                })}</p>
-                <p className='text-base'><strong>Costo:</strong> ${data.price.toFixed(2)}</p>
-                {/* Puedes agregar más información aquí según tus necesidades */}
-            </div>
-        );
-    };
+    const ExpandedComponent = ({ data }) => (
+        <div className="p-4 bg-gray-100 rounded-md">
+            <p className='text-base'><strong>Descripción completa del pedido:</strong> {data.description}</p>
+            <p className='text-base'><strong>Estado del pedido:</strong> {data.status}</p>
+            <p className='text-base'><strong>Última actualización:</strong> {new Date(data.last_updated_date).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            })}</p>
+            <p className='text-base'><strong>Costo:</strong> ${data.declared_value}</p>
+        </div>
+    );
+
+    if (isLoading) {
+        return <div>Cargando pedidos...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
-      <div className="font-bold">
-          <div className="justify-items-start p-3 font-bold">
-            <h2>Pedidos asignados</h2>
-          </div>
-          <div className="justify-items-center pr-20 pl-20 justify-center">
-          <Table 
-                columns={columns}
-                data={ordersData}
-                responsive
-                customStyles={customStyles}
-                paginationOptions={paginationComponentOptions}
-                expandableRows
-                expandOnRowClicked
-                expandableRowsComponent={({ data }) => <ExpandedComponent data={data} />}
-            />
-          </div>  
-          {isModalOpen && selectedOrder && (
-              <EditOrderModal
-                  isOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  order={selectedOrder}
-                  onSave={handleSave}
-              />
-          )}
-      </div>
+        <div className="font-bold">
+            <div className="justify-items-start p-3 font-bold">
+                <h2>Pedidos asignados</h2>
+            </div>
+            <div className="justify-items-center pr-20 pl-20 justify-center">
+                <Table 
+                    columns={columns}
+                    data={ordersData}
+                    responsive
+                    customStyles={customStyles}
+                    paginationOptions={paginationComponentOptions}
+                    expandableRows
+                    expandOnRowClicked
+                    expandableRowsComponent={({ data }) => <ExpandedComponent data={data} />}
+                />
+            </div>
+            {isModalOpen && selectedOrder && (
+                <EditOrderModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    order={selectedOrder}
+                    onSave={handleSave}
+                />
+            )}
+        </div>
     );
 };
 

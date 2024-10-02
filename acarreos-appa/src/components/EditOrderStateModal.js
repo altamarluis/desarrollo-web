@@ -21,7 +21,7 @@ const EditOrderModal = ({ isOpen, onClose, order, onSave }) => {
         >
           <option value="delivered">Entregado</option>
           <option value="delayed">Retrasado</option>
-          <option value="transit">En tránsito</option>
+          <option value="transit">En transito</option>
           <option value="lost">Extraviado</option>
           <option value="inactive">Inactivo</option>
         </select>

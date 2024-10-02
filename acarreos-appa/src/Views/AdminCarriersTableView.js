@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; 
 import Table from '../components/Table';
 
 const columns = [
@@ -27,20 +27,14 @@ const columns = [
         name: 'ESTADO',
         selector: row => {
             const stateStyles = {
-                available: "bg-[#E1FCEF] text-[#14804A]",
-                transit: "bg-[#F0F1FA] text-[#4F5AED]", 
-                rest: "bg-[#E9EDF5] text-[#5A6376]" 
-            };
-
-            const stateLabels = {
-                transit: "En tránsito",
-                rest: "Descanso",
-                available: "Disponible"
+                disponible: "bg-[#E1FCEF] text-[#14804A]",
+                'en tránsito': "bg-[#F0F1FA] text-[#4F5AED]", 
+                descanso: "bg-[#E9EDF5] text-[#5A6376]" 
             };
 
             return (
-                <div className={`flex w-[100px] h-[30px] font-medium rounded-full justify-center items-center ${stateStyles[row.state] || 'bg-gray-200 text-gray-700'}`}>
-                    {stateLabels[row.state] || 'Desconocido'}
+                <div className={`flex w-[100px] h-[30px] font-medium rounded-full justify-center items-center ${stateStyles[row.status.toLowerCase()] || 'bg-gray-200 text-gray-700'}`}>
+                    {row.status || 'Desconocido'}
                 </div>
             );
         },
@@ -48,67 +42,26 @@ const columns = [
     },
     {
         name: 'FINALIZACIÓN DESCANSO',
-        cell: row => new Date(row.updateAt).toLocaleString('es-ES', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        }),
-        minWidth: '200px',  // Aumenta el ancho mínimo si es necesario
+        cell: row => row.rest_end_date
+            ? new Date(row.rest_end_date).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            })
+            : 'N/A',
+        minWidth: '200px',
     },
     {
         name: 'KMs RECORRIDOS',
         cell: row => (
-            <div className='font-semibold'> {row.price.toFixed(2)} KMs</div>
+            <div className='font-semibold'> {row.km_traveled.toFixed(2)} KMs</div>
         ),
-        minWidth: '100px', 
+        minWidth: '100px',
     }
-];
-
-const data = [
-    {   
-        carrierName: 'Appa',
-        carrierId: 1001,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'available',
-        updateAt: new Date('2024-08-26T10:35:24'),
-        price: 100.00
-    },
-    {
-        carrierName: 'Bisontuku',
-        carrierId: 1002,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'transit',
-        updateAt: new Date('2024-08-22T14:45:12'),
-        price: 100.00
-    },
-    {
-        carrierName: 'Bisontoque',
-        carrierId: 1003,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'available',
-        updateAt: new Date('2024-08-21T09:07:34'),
-        price: 200.00
-    },
-    {
-        carrierName: 'Guaco',
-        carrierId: 1004,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'rest',
-        updateAt: new Date('2024-08-26T16:15:27'),
-        price: 300.00
-    },
-    {
-        carrierName: 'Bisontico',
-        carrierId: 1005,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...',
-        state: 'rest',
-        updateAt: new Date('2024-08-27T11:19:45'),
-        price: 300.00
-    },
 ];
 
 const paginationComponentOptions = {
@@ -146,13 +99,54 @@ const customStyles = {
         }
     },
     pagination: {
-        style: {
-            
-        }
+        style: {},
     },
 };
 
 const CarriersInventoryTable = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchBisons = async () => {
+            try {
+                const response = await fetch('http://34.176.155.184:5000/api/bisons');
+                if (!response.ok) {
+                    throw new Error('Error al obtener los datos');
+                }
+                const result = await response.json();
+                // Formatear los datos para que coincidan con los nombres de columnas
+                const formattedData = result.map(bison => ({
+                    carrierName: `Transportista ${bison.transporter_id}`,
+                    carrierId: bison.bison_id,
+                    description: `Bison ID: ${bison.bison_id}, Transportista ID: ${bison.transporter_id}`,
+                    state: bison.status,
+                    updateAt: bison.rest_end_date ? new Date(bison.rest_end_date) : null,
+                    price: bison.km_traveled,
+                    status: bison.status,
+                    rest_end_date: bison.rest_end_date,
+                    km_traveled: bison.km_traveled,
+                }));
+                setData(formattedData);
+                setLoading(false);
+            } catch (error) {
+                setError(error.message);
+                setLoading(false);
+            }
+        };
+
+        fetchBisons();
+    }, []);
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
       <div className="font-bold">
           <div className="justify-items-start p-3 font-bold">

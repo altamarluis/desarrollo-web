@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import "../styles/Header.css"
 import { FaLock} from 'react-icons/fa';
@@ -7,7 +8,7 @@ import { UserContext } from '../services/userContext';
 
 const ChangePasswordForm = ({ onSubmit }) => {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user, changePassword } = useContext(UserContext);
     const [passwordData, setPasswordData] = useState({
       currentPassword: '',
       newPassword: '',
@@ -34,16 +35,24 @@ const ChangePasswordForm = ({ onSubmit }) => {
     };
 
 
-    const handlePasswordSubmit = (e) => {
+    const handlePasswordSubmit = async (e) => {
       e.preventDefault();
       const formErrors = validatePasswordForm();
       if (Object.keys(formErrors).length > 0) {
         setErrors(formErrors);
       } else {
-        // Aquí iría la lógica para cambiar la contraseña
-        console.log("Cambio de contraseña:", passwordData);
-        onSubmit()
-        setErrors({});
+        try {
+          const result = await changePassword(passwordData.newPassword);
+          if (result.success) {
+            onSubmit();
+            setErrors({});
+          } else {
+            setErrors({ form: result.message });
+          }
+        } catch (error) {
+          console.error("Error en el cambio de contraseña", error);
+          setErrors({ form: "Error al cambiar la contraseña" });
+        }
       }
     };
 

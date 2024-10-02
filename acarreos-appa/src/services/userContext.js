@@ -52,6 +52,28 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const changePassword = async (newPassword) => {
+    if (!user) {
+      throw new Error("El usuario no está autenticado");
+    }
+
+    try {
+      const response = await axios.patch('http://34.176.155.184:5000/api/changePassword', {
+        user_id: user.id,
+        password: newPassword
+      });
+
+      if (response.status === 200) {
+        const updatedUser = response.data;
+        console.log(response.data);
+        return { success: true, user: updatedUser };
+      }
+    } catch (error) {
+      console.error("Error al cambiar la contraseña:", error);
+      return { success: false, message: error.response?.data?.message || "Error en la solicitud" };
+    }
+  };
+
   const updateGlobalParameters = async (newParameters) => {
     try {
       const response = await axios.put('https://api.example.com/parameters', newParameters);
@@ -63,7 +85,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser, deleteUser, parameters, updateGlobalParameters }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser, changePassword, deleteUser, parameters, updateGlobalParameters }}>
       {children}
     </UserContext.Provider>
   );

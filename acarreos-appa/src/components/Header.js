@@ -43,6 +43,7 @@ function Header() {
 
   const handleChangeParameters = () => {
     setShowParametersModal(!showParametersModal);
+    console.log(showParametersModal);
   };
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
@@ -83,6 +84,20 @@ function Header() {
       setErrors({});
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Cierra el menú si se hace clic fuera
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // Limpieza
+    };
+  }, []);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);

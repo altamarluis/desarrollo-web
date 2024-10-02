@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 const Modal = ({ isOpen, onClose, children }) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'unset';
     } else {
       document.body.style.overflow = 'unset';
     }

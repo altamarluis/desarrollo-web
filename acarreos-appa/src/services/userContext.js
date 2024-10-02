@@ -12,6 +12,8 @@ export const UserProvider = ({ children }) => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    fetchParameters();
   }, []);
 
   const login = async (credentials) => {
@@ -74,18 +76,41 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const updateGlobalParameters = async (newParameters) => {
+  const fetchParameters = async () => {
     try {
-      const response = await axios.put('https://api.example.com/parameters', newParameters);
-      const updatedParameters = response.data;
-      setParameters(prevParameters => ({ ...prevParameters, ...updatedParameters }));
+      const response = await axios.get('http://34.176.155.184:5000/api/parameters');
+      setParameters(response.data);
     } catch (error) {
-      console.error('Error updating parameters:', error);
+      console.error('Error fetching parameters:', error);
     }
   };
 
+  const updateGlobalParameters = async (newParameters) => {
+    try {
+      // Llamar al backend enviando los parámetros en el formato correcto
+      const response = await axios.patch('http://34.176.155.184:5000/api/updateParams', {
+        max_km_per_bison: newParameters.max_km_per_bison,
+        bison_rest_days: newParameters.bison_rest_days,
+        distance_rate: newParameters.distance_rate,
+        weight_rate: newParameters.weight_rate,
+        declared_value_rate: newParameters.declared_value_rate,
+        medium_dimension_charge: newParameters.medium_dimension_charge,
+        large_dimension_charge: newParameters.large_dimension_charge
+      });
+  
+      const updatedParameters = response.data;
+      setParameters(prevParameters => ({ ...prevParameters, ...updatedParameters }));
+  
+      return updatedParameters; 
+    } catch (error) {
+      console.error('Error updating parameters:', error);
+      throw new Error('No se pudieron actualizar los parámetros'); 
+    }
+  };
+  
+
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser, changePassword, deleteUser, parameters, updateGlobalParameters }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser, changePassword, deleteUser, parameters, fetchParameters, updateGlobalParameters }}>
       {children}
     </UserContext.Provider>
   );

@@ -17,12 +17,6 @@ function Header() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showParametersModal, setShowParametersModal] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
-  });
 
   const dropdownRef = useRef(null);
 
@@ -52,43 +46,12 @@ function Header() {
     setShowEditModal(false);
     setShowPasswordModal(false);
     setShowParametersModal(false);
-    setErrors({});
-  };
-
-  const handlePasswordInputChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const validatePasswordForm = () => {
-    let tempErrors = {};
-    if (!passwordData.currentPassword) tempErrors.currentPassword = 'La contraseña actual es obligatoria';
-    if (!passwordData.newPassword) tempErrors.newPassword = 'La nueva contraseña es obligatoria';
-    else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(passwordData.newPassword)) {
-      tempErrors.newPassword = 'La contraseña debe tener al menos 8 caracteres, incluir al menos una letra, un número y un carácter especial.';
-    }
-    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      tempErrors.confirmNewPassword = 'Las contraseñas no coinciden';
-    }
-    return tempErrors;
-  };
-
-  const handlePasswordSubmit = (e) => {
-    e.preventDefault();
-    const formErrors = validatePasswordForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-    } else {
-      console.log('Cambio de contraseña:', passwordData);
-      setShowPasswordModal(false);
-      setErrors({});
-    }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false); // Cierra el menú si se hace clic fuera
+        setShowDropdown(false); 
       }
     };
 
@@ -104,6 +67,7 @@ function Header() {
   };
 
   return (
+    <>
     <header className="bg-[D9D9D9] h-[55px] flex justify-between items-center px-4">
       <div className="logo flex">
         Appa
@@ -198,30 +162,20 @@ function Header() {
           )}
         </nav>
       )}
-
-      {showEditModal && (
-        <Modal onClose={handleCloseModal}>
-          <EditUserForm />
-        </Modal>
-      )}
-
-      {showPasswordModal && (
-        <Modal onClose={handleCloseModal}>
-          <ChangePasswordForm
-            passwordData={passwordData}
-            onChange={handlePasswordInputChange}
-            onSubmit={handlePasswordSubmit}
-            errors={errors}
-          />
-        </Modal>
-      )}
-
-      {showParametersModal && (
-        <Modal onClose={handleCloseModal}>
-          <EditParametersForm />
-        </Modal>
-      )}
     </header>
+      <Modal isOpen={showEditModal} onClose={handleCloseModal}>
+        <EditUserForm onSubmit={handleCloseModal}/>
+      </Modal>
+
+      <Modal isOpen={showPasswordModal} onClose={handleCloseModal}>
+        <ChangePasswordForm onSubmit={handleCloseModal}
+        />
+      </Modal>
+
+      <Modal isOpen={showParametersModal} onClose={handleCloseModal}>
+        <EditParametersForm onSubmit={handleCloseModal}/>
+      </Modal>
+    </>
   );
 }
 

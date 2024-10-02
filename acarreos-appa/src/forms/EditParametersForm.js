@@ -1,14 +1,27 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import "../styles/Header.css"
-import { FaUser, FaEnvelope, FaMapMarkerAlt, FaIdCard, FaGlobe} from 'react-icons/fa';
+import { FaGlobe} from 'react-icons/fa';
 import FormField from '../components/FormField';
 import { UserContext } from '../services/userContext';
 
 const EditParametersForm = ({ onSubmit }) => {
     const { parameters, updateGlobalParameters } = useContext(UserContext);
-    const [params, setParams] = useState(parameters);
+    const [params, setParams] = useState({
+      max_km_per_bison: '',
+      bison_rest_days: '',
+      distance_rate: '',
+      weight_rate: '',
+      declared_value_rate: '',
+      medium_dimension_charge: '',
+      large_dimension_charge: ''
+    });
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+      if (parameters) {
+        setParams(parameters);  
+      }
+    }, [parameters]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,8 +30,7 @@ const EditParametersForm = ({ onSubmit }) => {
 
   const validateEditForm = () => {
     let tempErrors = {};
-    const fields = ['maxKm', 'restDays', 'distanceFee', 'weightFee', 'valueFee', 'mediumFee', 'largeFee'];
-    
+    const fields = ['max_km_per_bison', 'bison_rest_days', 'distance_rate', 'weight_rate', 'declared_value_rate', 'medium_dimension_charge', 'large_dimension_charge'];
     fields.forEach(field => {
       if (!params[field]) {
         tempErrors[field] = 'Este campo es obligatorio';
@@ -46,79 +58,74 @@ const EditParametersForm = ({ onSubmit }) => {
     <form className='edit-form' onSubmit={handleEditSubmit}>
               
               <FormField
-      name="maxKm"
-      label="Tope máximo de km recorridos por bisonte"
-      type="text"
-      value={params.maxKm}
-      onChange={handleInputChange}
-      error={errors.maxKm}
-      icon={FaGlobe}
-    />
+        name="max_km_per_bison"
+        label="Tope máximo de km recorridos por bisonte"
+        type="text"
+        value={params.max_km_per_bison}
+        onChange={handleInputChange}
+        error={errors.max_km_per_bison}
+        icon={FaGlobe}
+      />
 
-    <FormField
-      name="restDays"
-      label="Días de descanso bisontes"
-      type="text"
-      value={params.restDays}
-      placeholder=""
-      onChange={handleInputChange}
-      error={errors.restDays}
-      icon={FaGlobe}
-    />
+      <FormField
+        name="bison_rest_days"
+        label="Días de descanso bisontes"
+        type="text"
+        value={params.bison_rest_days}
+        onChange={handleInputChange}
+        error={errors.bison_rest_days}
+        icon={FaGlobe}
+      />
 
-    <FormField
-      name="distanceFee"
-      label="Tarifa por distancia"
-      type="text"
-      value={params.distanceFee}
-      placeholder=""
-      onChange={handleInputChange}
-      error={errors.distanceFee}
-      icon={FaGlobe}
-    />
+      <FormField
+        name="distance_rate"
+        label="Tarifa por distancia"
+        type="text"
+        value={params.distance_rate}
+        onChange={handleInputChange}
+        error={errors.distance_rate}
+        icon={FaGlobe}
+      />
 
-    <FormField
-      name="weightFee"
-      label="Tarifa por peso"
-      type="text"
-      value={params.weightFee}
-      onChange={handleInputChange}
-      error={errors.weightFee}
-      icon={FaGlobe}
-    />
-    
-    <FormField
-      name="valueFee"
-      label="Tarifa por valor declarado"
-      type="text"
-      value={params.valueFee}
-      placeholder=""
-      onChange={handleInputChange}
-      error={errors.valueFee}
-      icon={FaGlobe}
-    />
+      <FormField
+        name="weight_rate"
+        label="Tarifa por peso"
+        type="text"
+        value={params.weight_rate}
+        onChange={handleInputChange}
+        error={errors.weight_rate}
+        icon={FaGlobe}
+      />
 
-    <FormField
-      name="mediumFee"
-      label="cargo dimension media"
-      type="text"
-      value={params.mediumFee}
-      placeholder=""
-      onChange={handleInputChange}
-      error={errors.mediumFee}
-      icon={FaGlobe}
-    />
+      <FormField
+        name="declared_value_rate"
+        label="Tarifa por valor declarado"
+        type="text"
+        value={params.declared_value_rate}
+        onChange={handleInputChange}
+        error={errors.declared_value_rate}
+        icon={FaGlobe}
+      />
 
-    <FormField
-      name="largeFee"
-      label="cargo dimension grande"
-      type="text"
-      value={params.largeFee}
-      placeholder=""
-      onChange={handleInputChange}
-      error={errors.largeFee}
-      icon={FaGlobe}
-    />
+      <FormField
+        name="medium_dimension_charge"
+        label="Cargo por dimensión media"
+        type="text"
+        value={params.medium_dimension_charge}
+        onChange={handleInputChange}
+        error={errors.medium_dimension_charge}
+        icon={FaGlobe}
+      />
+
+      <FormField
+        name="large_dimension_charge"
+        label="Cargo por dimensión grande"
+        type="text"
+        value={params.large_dimension_charge}
+        onChange={handleInputChange}
+        error={errors.large_dimension_charge}
+        icon={FaGlobe}
+      />
     
     <button type="submit" className="submit-btn" style={{ width: 'fit-content', textAlign: 'center' }}>Guardar Cambios</button>
   </form>

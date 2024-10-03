@@ -8,7 +8,7 @@ import { UserContext } from '../services/userContext';
 
 const SolicitarServicio = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, quoteOrder, createOrder } = useContext(UserContext);
   const [serviceType, setServiceType] = useState('documento');
   const [cost, setCost] = useState(0.0);
   const [documentData, setDocumentData] = useState({
@@ -57,36 +57,108 @@ const SolicitarServicio = () => {
     setMovingData(prev => ({ ...prev, [name]: value }));
   };
 
-  const calculateCost = () => {
+  const calculateCost = async () => {
     let calculatedCost = 0;
-    let distance =  2;
-    switch (serviceType) {
-      case 'documento':
-        calculatedCost = (distance * 2) + (documentData.value * 0.3) + (documentData.weight * 0.05);
-        break;
-      case 'objeto':
-        calculatedCost = (distance * 2) + (objectData.value * 0.2) + (objectData.weight * 0.1) + (objectData.width * objectData.height * objectData.lengthh * 0.01);
-        break;
-      case 'mudanza':
-        if (movingData.size.value === 'small') calculatedCost = (distance * 2) + movingData.value * 0.3 + 20;
-        else if (movingData.size.value === 'medium') calculatedCost = (distance * 2) + movingData.value * 0.3 + 35;
-        else if (movingData.size.value === 'large') calculatedCost = (distance * 2) + movingData.value * 0.3 + 50;
-        else calculatedCost = (distance * 2) + movingData.value * 0.3;
-        break;
-      default:
-        calculatedCost = 0;
+    try {
+      if (serviceType === 'documento') {
+        const response = await quoteOrder({
+          origin_city_id: documentData.cityOfOrigin,
+          destination_city_id: documentData.cityOfDestiny,
+          serviceType,
+          details: documentData,
+        });
+        console.log(response);
+        calculatedCost = response.totalCost;
+      } else if (serviceType === 'mudanza') {
+        const response = await quoteOrder({
+          origin_city_id: movingData.cityOfOrigin,
+          destination_city_id: movingData.cityOfDestiny,
+          serviceType,
+          details: movingData,
+        });
+        calculatedCost = response.totalCost;
+      } else if (serviceType === 'objeto') {
+        const response = await quoteOrder({
+          origin_city_id: objectData.cityOfOrigin,
+          destination_city_id: objectData.cityOfDestiny,
+          serviceType,
+          details: objectData,
+        });
+        calculatedCost = response.totalCost;
+      }
+    } catch (error) {
+      console.log('Error al calcular el costo:', error);
     }
     setCost(calculatedCost);
   };
+
 
   useEffect(() => {
     calculateCost();
   }, [serviceType, documentData, objectData, movingData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (user) alert("Pedido Solicitado")
-    else navigate('/login')
+    if (user) {
+      try {
+        let requestData = {};
+        const trackingCode = Math.random().toString(36).substring(2, 12); // Genera un código de rastreo aleatorio
+  
+        // Configura los datos según el tipo de servicio
+        if (serviceType === 'mudanza') {
+          requestData = {
+            user_id: user.user_id,
+            origin_city_id: movingData.cityOfOrigin,
+            destination_city_id: movingData.cityOfDestiny,
+            origin_address: movingData.addressOfOrigin,
+            destination_address: movingData.addressOfDestiny,
+            service_date: movingData.date,
+            declared_value: cost,
+            order_type: serviceType,
+            status: "Inactivo",
+            tracking_code: trackingCode,
+          };
+        } else if (serviceType === 'objeto') {
+          requestData = {
+            user_id: user.user_id,
+            origin_city_id: objectData.cityOfOrigin,
+            destination_city_id: objectData.cityOfDestiny,
+            origin_address: objectData.addressOfOrigin,
+            destination_address: objectData.addressOfDestiny,
+            service_date: objectData.date,
+            declared_value: cost,
+            order_type: serviceType,
+            status: "Inactivo",
+            tracking_code: trackingCode,
+          };
+        } else if (serviceType === 'documento') {
+          requestData = {
+            user_id: user.user_id,
+            origin_city_id: documentData.cityOfOrigin,
+            destination_city_id: documentData.cityOfDestiny,
+            origin_address: documentData.addressOfOrigin,
+            destination_address: documentData.addressOfDestiny,
+            service_date: documentData.date,
+            declared_value: cost,
+            order_type: serviceType,
+            status: "Inactivo",
+            tracking_code: trackingCode,
+          };
+        }
+  
+        const response = await createOrder(requestData);
+  
+        if (response && response.data) {
+          alert("Pedido solicitado con éxito");
+        } else {
+          console.error("Error al crear el pedido:", response);
+        }
+      } catch (error) {
+        console.error("Error al crear el pedido:", error);
+      }
+    } else {
+      navigate('/login');
+    }
   };
 
   return (

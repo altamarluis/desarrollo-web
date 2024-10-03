@@ -96,8 +96,58 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const getAllCities = async () => {
+    try {
+      const response = await axios.get('http://34.176.155.184:5000/api/cities');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+    }
+  };
+
+  const quoteOrder = async (origin_city_id, destination_city_id, serviceType, details) => {
+    try {
+      const response = await axios.post('http://34.176.155.184:5000/api/getOrderCost', {
+        origin_city_id,
+        destination_city_id,
+        serviceType,
+        details
+      });
+      if (response.data) {
+        console.log("Respuesta del servidor:", response.data);
+        return response.data;  // Asegúrate de devolver los datos de la respuesta
+      } else {
+        console.log("Respuesta vacía o inválida del servidor");
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener la cotización:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const createOrder = async (user_id, origin_city_id, destination_city_id, origin_address, destination_address, service_date, declared_value, order_type, tracking_code) => {
+    try {
+      const response = await axios.post('http://34.176.155.184:5000/api/createOrder', { 
+        user_id, 
+        origin_city_id, 
+        destination_city_id, 
+        origin_address, 
+        destination_address, 
+        service_date, 
+        declared_value, 
+        order_type, 
+        tracking_code 
+      });
+      console.log('Orden creada:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error al crear la orden:', error.response ? error.response.data : error.message);
+      return null;
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser, deleteUser, parameters, updateGlobalParameters, changePassword }}>
+    <UserContext.Provider value={{ user, login, logout, updateUser, deleteUser, parameters, updateGlobalParameters, changePassword, getAllCities, quoteOrder, createOrder }}>
       {children}
     </UserContext.Provider>
   );
